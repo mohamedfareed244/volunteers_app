@@ -1,7 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+import 'package:volunteers_app/services/AuthService.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'screens/AuthWrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,27 +19,26 @@ void main() async {
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
-  @override
+ @override
   Widget build(BuildContext context) {
-  
-
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: ElevatedButton(onPressed: _addDataToFirestore, child: Text("Click")),
-        ),
+    return StreamProvider<User?>.value(
+      value: AuthService().user, // Stream from AuthService
+      initialData: null,
+      child: MaterialApp(
+        home: const AuthWrapper(),
       ),
     );
   }
-
-
 }
-  Future<void> _addDataToFirestore() async {
-    try {
-      final doc = FirebaseFirestore.instance.collection('users').doc('user1');
-      await doc.set({'name': 'Mohamed fareed', 'age': 30});
-      print('Data written to Firestore successfully!'); 
-    } catch (e) {
-      print('Error writing to Firestore: $e');
-    }
-  }
+
+
+
+  // Future<void> _addDataToFirestore() async {
+  //   try {
+  //     final doc = FirebaseFirestore.instance.collection('users').doc('user1');
+  //     await doc.set({'name': 'Eslam', 'age': 30});
+  //     print('Data written to Firestore successfully!'); 
+  //   } catch (e) {
+  //     print('Error writing to Firestore: $e');
+  //   }
+  // }
