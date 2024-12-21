@@ -64,7 +64,7 @@ class _oppWidgetState extends State<oppWidget> {
                       onTap: () {},
                       child: const Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text('Apply Now'),
+                        child: Text('Apply Now' ),
                       ),
                     ),
                   ),

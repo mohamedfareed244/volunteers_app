@@ -48,10 +48,10 @@ class _opportunitiesPageState extends State<opportunitiesPage> {
                     prefixIcon: const Icon(Icons.search),
                     suffixIcon: GestureDetector(
                       onTap: () {
-                        setState(() {
+                        // setState(() {
                           searchTextController.clear();
                           FocusScope.of(context).unfocus();
-                        });
+                        // });
                       },
                       child: const Icon(
                         Icons.clear,
