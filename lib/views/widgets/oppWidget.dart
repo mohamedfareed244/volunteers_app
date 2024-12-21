@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:volunteers_app/views/inner_screens/opp_details.dart';
+import 'package:volunteers_app/views/widgets/heart_btn.dart';
 import 'package:volunteers_app/views/widgets/subtitle_text.dart';
 import 'package:volunteers_app/views/widgets/title_text.dart';
 
@@ -38,10 +39,9 @@ class _oppWidgetState extends State<oppWidget> {
                   flex: 5,
                   child: TitlesTextWidget(label: "Title " * 10),
                 ),
-                Flexible(
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(IconlyLight.heart),
+               const Flexible(
+                  child:HeartButtonWidget (
+                    color:Colors.amber,
                   ),
                 ),
               ],
