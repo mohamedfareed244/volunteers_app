@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:volunteers_app/screens/Home/home.dart';
 import 'package:volunteers_app/services/AuthService.dart';
 
 class Register extends StatefulWidget {
@@ -25,15 +26,18 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange[50], 
+      backgroundColor: Colors.orange[50],
       appBar: AppBar(
-        backgroundColor: Colors.orange[700], 
+        backgroundColor: Colors.orange[700],
         elevation: 5.0,
-        title: Text('Sign Up to Volunteens', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text('Sign Up to Volunteens',
+            style: TextStyle(fontWeight: FontWeight.bold)),
         actions: <Widget>[
           TextButton.icon(
             icon: Icon(Icons.person, color: Colors.white),
-            label: Text('Sign In', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+            label: Text('Sign In',
+                style: TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold)),
             onPressed: () {
               widget.toggleView!();
             },
@@ -50,30 +54,57 @@ class _RegisterState extends State<Register> {
                   child: Column(
                     children: <Widget>[
                       SizedBox(height: 20.0),
-                      buildTextFormField('First Name', Icons.person, (val) => firstName = val),
+                      buildTextFormField(
+                          'First Name', Icons.person, (val) => firstName = val),
                       SizedBox(height: 20.0),
-                      buildTextFormField('Last Name', Icons.person_outline, (val) => lastName = val),
+                      buildTextFormField('Last Name', Icons.person_outline,
+                          (val) => lastName = val),
                       SizedBox(height: 20.0),
-                      buildTextFormField('Email', Icons.email, (val) => email = val, isEmail: true),
+                      buildTextFormField(
+                          'Email', Icons.email, (val) => email = val,
+                          isEmail: true),
                       SizedBox(height: 20.0),
-                      buildTextFormField('Password', Icons.lock, (val) => password = val, obscureText: true),
+                      buildTextFormField(
+                          'Password', Icons.lock, (val) => password = val,
+                          obscureText: true),
                       SizedBox(height: 20.0),
-                      buildTextFormField('Address', Icons.home, (val) => address = val),
+                      buildTextFormField(
+                          'Address', Icons.home, (val) => address = val),
                       SizedBox(height: 30.0),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange[600],
                           padding: EdgeInsets.symmetric(vertical: 15.0),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0)),
                         ),
-                        child: Text('Sign Up', style: TextStyle(color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.bold)),
+                        child: Text('Sign Up',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold)),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             setState(() => loading = true);
-                            dynamic result = await _authService.registerWithEmailAndPassword(email, password);
+
+                            // Register the user with all input fields
+                            dynamic result =
+                                await _authService.registerWithEmailAndPassword(
+                              email,
+                              password,
+                              firstName,
+                              lastName,
+                              address,
+                            );
+
                             setState(() => loading = false);
+
                             if (result == null) {
-                              setState(() => error = 'Registration failed. Try again.');
+                              setState(() =>
+                                  error = 'Registration failed. Try again.');
+                            } else {
+                  Navigator.push(context,MaterialPageRoute(builder: (context)=> Home()));
+                              print("User registered: ${result.uid}");
                             }
                           }
                         },
@@ -91,7 +122,9 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  Widget buildTextFormField(String label, IconData icon, Function(String) onChanged, {bool obscureText = false, bool isEmail = false}) {
+  Widget buildTextFormField(
+      String label, IconData icon, Function(String) onChanged,
+      {bool obscureText = false, bool isEmail = false}) {
     return TextFormField(
       decoration: InputDecoration(
         labelText: label,
