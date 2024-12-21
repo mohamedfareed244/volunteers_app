@@ -4,7 +4,7 @@ import '../services/assets_manager.dart';
 
 class AppConstants {
   static const String productImageUrl =
-      'https://i.ibb.co/8r1Ny2n/20-Nike-Air-Force-1-07.png';
+      'https://media.gettyimages.com/id/1498170916/photo/a-couple-is-taking-a-bag-of-food-at-the-food-and-clothes-bank.jpg?s=612x612&w=gi&k=20&c=OQXzpRYIt4_vr0b2tTz9Wsz8aCPi9FgUBwGSEeJaToM=';
   static List<String> bannersImages = [
 
   ];

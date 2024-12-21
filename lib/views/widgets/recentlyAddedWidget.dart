@@ -1,5 +1,6 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
+import 'package:volunteers_app/views/inner_screens/opp_details.dart';
 import 'package:volunteers_app/views/widgets/subtitle_text.dart';
 
 import 'heart_btn.dart';
@@ -13,7 +14,9 @@ class recentlyAddedWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: () async {},
+        onTap: ()async {
+        await  Navigator.pushNamed(context, OppDetails.routName);
+        },
         child: SizedBox(
           width: size.width * 0.45,
           child: Row(

@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:volunteers_app/views/inner_screens/opp_details.dart';
 import 'package:volunteers_app/views/widgets/subtitle_text.dart';
 import 'package:volunteers_app/views/widgets/title_text.dart';
 
@@ -18,8 +19,8 @@ class _oppWidgetState extends State<oppWidget> {
     return Padding(
       padding: const EdgeInsets.all(3.0),
       child: GestureDetector(
-        onTap: () {
-          log("TODO navigate to the opp details screen");
+        onTap: ()async {
+        await  Navigator.pushNamed(context, OppDetails.routName);
         },
         child: Column(
           children: [
@@ -64,7 +65,7 @@ class _oppWidgetState extends State<oppWidget> {
                       onTap: () {},
                       child: const Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text('Apply Now' ),
+                        child: Text('Apply Now'),
                       ),
                     ),
                   ),

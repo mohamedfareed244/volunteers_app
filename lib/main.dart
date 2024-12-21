@@ -6,6 +6,7 @@ import 'package:volunteers_app/services/AuthService.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteers_app/views/Drawer/Drawer.dart';
+import 'package:volunteers_app/views/inner_screens/opp_details.dart';
 
 import 'screens/AuthWrapper.dart';
 
@@ -27,6 +28,10 @@ class MainApp extends StatelessWidget {
       initialData: null,
       child: MaterialApp(
         home: drawerr(),
+         routes: {
+    OppDetails.routName: (context) => const OppDetails(),
+    // Add more routes here
+  },
       ),
     );
   }
