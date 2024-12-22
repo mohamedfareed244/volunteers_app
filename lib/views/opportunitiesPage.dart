@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:dynamic_height_grid_view/dynamic_height_grid_view.dart';
 import 'package:provider/provider.dart';
+import 'package:volunteers_app/models/opp_model.dart';
 import 'package:volunteers_app/providers/opp_provider.dart';
 import 'package:volunteers_app/views/services/assets_manager.dart';
 import 'package:volunteers_app/views/widgets/title_text.dart';
@@ -31,67 +32,95 @@ class _opportunitiesPageState extends State<opportunitiesPage> {
 
 
 
+ List<ProductModel> productListSearch = [];
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
+
+    String? passedCategory =
+        ModalRoute.of(context)!.settings.arguments as String?;
+
+    final List<ProductModel> productList = passedCategory == null
+        ? productProvider.getProducts
+        : productProvider.findByCategory(ctgName: passedCategory);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-    
-         child: Scaffold(
-
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 15.0,
-                ),
-                TextField(
-                  controller: searchTextController,
-                  decoration: InputDecoration(
-                    filled: true,
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        // setState(() {
-                        searchTextController.clear();
-                        FocusScope.of(context).unfocus();
-                        // });
-                      },
-                      child: const Icon(
-                        Icons.clear,
-                        color: Colors.red,
+      child: Scaffold(
+         
+          body: productList.isEmpty
+              ? const Center(
+                  child: TitlesTextWidget(label: "No result found"),
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 15.0,
                       ),
-                    ),
-                  ),
-                  onChanged: (value) {},
-                  onSubmitted: (value) {
-                    log(searchTextController.text);
-                  },
-                ),
-                const SizedBox(
-                  height: 15.0,
-                ),
-                Expanded(
-                  child: DynamicHeightGridView(
-                    itemCount: productProvider.getProducts.length,
-                    builder: ((context, index) {
-                      return ChangeNotifierProvider.value(
-                        value: productProvider.getProducts[index],
-                        child: oppWidget(
-                          productId:
-                              productProvider.getProducts[index].productId,
+                      TextField(
+                        controller: searchTextController,
+                        decoration: InputDecoration(
+                          hintText: "Search",
+                          filled: true,
+                          prefixIcon: const Icon(Icons.search),
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              // setState(() {
+                              searchTextController.clear();
+                              FocusScope.of(context).unfocus();
+                              // });
+                            },
+                            child: const Icon(
+                              Icons.clear,
+                              color: Colors.red,
+                            ),
+                          ),
                         ),
-                      );
-                    }),
-                    crossAxisCount: 2,
+                        onChanged: (value) {
+                          setState(() {
+                            productListSearch = productProvider.searchQuery(
+                                searchText: searchTextController.text);
+                          });
+                        },
+                        onSubmitted: (value) {
+                          setState(() {
+                            productListSearch = productProvider.searchQuery(
+                                searchText: searchTextController.text);
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                        height: 15.0,
+                      ),
+                      if (searchTextController.text.isNotEmpty &&
+                          productListSearch.isEmpty) ...[
+                        const Center(
+                            child: TitlesTextWidget(
+                          label: "No results found",
+                          fontSize: 40,
+                        ))
+                      ],
+                      Expanded(
+                        child: DynamicHeightGridView(
+                          itemCount: searchTextController.text.isNotEmpty
+                              ? productListSearch.length
+                              : productList.length,
+                          builder: ((context, index) {
+                            return oppWidget(
+                              productId: searchTextController.text.isNotEmpty
+                                  ? productListSearch[index].productId
+                                  : productList[index].productId,
+                            );
+                          }),
+                          crossAxisCount: 2,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-          )),
+                )),
     );
   }
 }

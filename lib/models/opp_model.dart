@@ -10,4 +10,6 @@ class ProductModel with ChangeNotifier {
     required this.productDescription,
     required this.productImage,
   });
+
+  get productCategory => null;
 }

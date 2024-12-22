@@ -15,6 +15,25 @@ class ProductProvider with ChangeNotifier {
     return _products.firstWhere((element) => element.productId == productId);
   }
 
+
+ List<ProductModel> searchQuery({required String searchText}) {
+    List<ProductModel> searchList = _products
+        .where((element) => element.productTitle
+            .toLowerCase()
+            .contains(searchText.toLowerCase()))
+        .toList();
+    return searchList;
+  }
+
+  List<ProductModel> findByCategory({required String ctgName}) {
+    List<ProductModel> ctgList = _products
+        .where((element) => element.productCategory
+            .toLowerCase()
+            .contains(ctgName.toLowerCase()))
+        .toList();
+    return ctgList;
+  }
+
   final List<ProductModel> _products = [
 
     ProductModel(
