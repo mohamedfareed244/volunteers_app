@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:provider/provider.dart';
+import 'package:volunteers_app/providers/opp_provider.dart';
 import 'package:volunteers_app/views/widgets/subtitle_text.dart';
 import 'package:volunteers_app/views/widgets/title_text.dart';
 import 'package:volunteers_app/views/widgets/recentlyAddedWidget.dart';
@@ -18,6 +20,7 @@ class _homePageState extends State<homePage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final productProvider = Provider.of<ProductProvider>(context);
     return Scaffold(
      
       body: Padding(
@@ -63,9 +66,11 @@ class _homePageState extends State<homePage> {
                 height: size.height * 0.2,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return const recentlyAddedWidget();
+                   itemCount: 10,
+                   itemBuilder: (context, index) {
+                      return ChangeNotifierProvider.value(
+                          value: productProvider.getProducts[index],
+                          child: const recentlyAddedWidget());
                     }),
               ),
               const SizedBox(

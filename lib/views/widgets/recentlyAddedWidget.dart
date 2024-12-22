@@ -1,5 +1,7 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:volunteers_app/models/opp_model.dart';
 import 'package:volunteers_app/views/inner_screens/opp_details.dart';
 import 'package:volunteers_app/views/widgets/subtitle_text.dart';
 
@@ -11,11 +13,16 @@ class recentlyAddedWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final productsModel = Provider.of<ProductModel>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: ()async {
-        await  Navigator.pushNamed(context, OppDetails.routName);
+        onTap: () async {
+         await Navigator.pushNamed(
+                  context,
+                  OppDetails.routName,
+                  arguments: productsModel.productId,
+                );
         },
         child: SizedBox(
           width: size.width * 0.45,
@@ -25,11 +32,10 @@ class recentlyAddedWidget extends StatelessWidget {
               Flexible(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    'assets/images/carousel-1.jpg', // Replace with your placeholder image path
+                  child: FancyShimmerImage(
+                    imageUrl: productsModel.productImage,
                     width: size.width * 0.28,
                     height: size.width * 0.28,
-                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -41,7 +47,7 @@ class recentlyAddedWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Title " * 10,
+                      productsModel.productTitle,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -49,13 +55,11 @@ class recentlyAddedWidget extends StatelessWidget {
                       child: Row(
                         children: [
                           const HeartButtonWidget(),
-                          InkWell(
-                            splashColor: Colors.amber,
-                            borderRadius: BorderRadius.circular(16.0),
-                            onTap: () {},
-                            child: const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text('Apply Now'),
+                          IconButton(
+                            onPressed: () {},
+                            icon: const Icon(
+                             Icons.volunteer_activism,
+                              size: 18,
                             ),
                           ),
                         ],
@@ -63,7 +67,7 @@ class recentlyAddedWidget extends StatelessWidget {
                     ),
                     const FittedBox(
                       child: SubtitleTextWidget(
-                        label: "Recently Added",
+                        label: "Details",
                         color: Colors.amber,
                       ),
                     ),
