@@ -8,9 +8,15 @@ import 'package:volunteers_app/views/inner_screens/opp_details.dart';
 import 'package:volunteers_app/views/widgets/heart_btn.dart';
 import 'package:volunteers_app/views/widgets/subtitle_text.dart';
 import 'package:volunteers_app/views/widgets/title_text.dart';
+import 'package:volunteers_app/providers/opp_provider.dart';
 
 class oppWidget extends StatefulWidget {
-  const oppWidget({super.key});
+  const oppWidget({
+    super.key,
+    required this.productId,
+  });
+
+  final String productId;
 
   @override
   State<oppWidget> createState() => _oppWidgetState();
@@ -19,80 +25,117 @@ class oppWidget extends StatefulWidget {
 class _oppWidgetState extends State<oppWidget> {
   @override
   Widget build(BuildContext context) {
-    final productModelProvider = Provider.of<ProductModel>(context);
+    // final productModelProvider = Provider.of<ProductModel>(context);
+    final productProvider = Provider.of<ProductProvider>(context);
+    final getCurrProduct = productProvider.findByProdId(widget.productId);
     Size size = MediaQuery.of(context).size;
-    return Padding(
-      padding: const EdgeInsets.all(3.0),
-      child: GestureDetector(
-        onTap: () async {
-          await Navigator.pushNamed(context, OppDetails.routName);
-        },
-        child: Column(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(30.0),
-              child: FancyShimmerImage(
-                imageUrl: productModelProvider.productImage,
-                width: double.infinity,
-                height: size.height * 0.22,
-              ),
-            ),
-            const SizedBox(
-              height: 15.0,
-            ),
-            Row(
-              children: [
-                Flexible(
-                  flex: 5,
-                  child: TitlesTextWidget(
-                    label: productModelProvider.productTitle,
-                    maxLines: 2,
-                    fontSize: 18,
-                  ),
-                ),
-                const Flexible(
-                  child: HeartButtonWidget(
-                    color: Colors.amber,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  flex: 3,
-                  child: const SubtitleTextWidget(
-                    label: ("sqscsvs"),
-                  ),
-                ),
-                Flexible(
-                  child: Material(
-                    borderRadius: BorderRadius.circular(16.0),
-                    color: Colors.amber,
-                    child: InkWell(
-                      splashColor: Colors.red,
-                      borderRadius: BorderRadius.circular(16.0),
-                      onTap: () {},
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: const Icon(
-                          Icons.volunteer_activism,
-                          size: 20,
-                          color: Colors.white,
-                        ),
-                      ),
+    return getCurrProduct == null
+        ? const SizedBox.shrink()
+        : Padding(
+            padding: const EdgeInsets.all(3.0),
+            child: GestureDetector(
+              onTap: () async {
+                await Navigator.pushNamed(
+                  context,
+                  OppDetails.routName,
+                  arguments: getCurrProduct.productId,
+                );
+              },
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(30.0),
+                    child: FancyShimmerImage(
+                      imageUrl: getCurrProduct.productImage,
+                      width: double.infinity,
+                      height: size.height * 0.22,
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(
+                    height: 15.0,
+                  ),
+                  Row(
+                    children: [
+                      Flexible(
+                        flex: 5,
+                        child: TitlesTextWidget(
+                          label: getCurrProduct.productTitle,
+                          maxLines: 2,
+                          fontSize: 18,
+                        ),
+                      ),
+                      const Flexible(
+                        flex: 2,
+                        child: Align(
+                          alignment: Alignment
+                              .center, // Center the HeartButtonWidget horizontally
+                          child: HeartButtonWidget(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 15.0,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          flex: 3,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.amber, // Background color
+                              borderRadius: BorderRadius.circular(
+                                  10.0), // Rounded corners
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10.0,
+                                horizontal: 15.0), // Padding around the text
+                            child: const Center(
+                              // Center the text within the container
+                              child: Text(
+                                "Apply Now",
+                                style: TextStyle(
+                                  color: Colors.white, // Text color
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          child: Material(
+                            borderRadius: BorderRadius.circular(16.0),
+                            color: Colors.amber,
+                            child: InkWell(
+                              splashColor: Colors.red,
+                              borderRadius: BorderRadius.circular(16.0),
+                              onTap: () {},
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.volunteer_activism,
+                                  size: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        // SizedBox(
+                        //   width: 1,
+                        // ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 }
