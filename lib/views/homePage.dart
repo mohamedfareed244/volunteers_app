@@ -15,24 +15,23 @@ class homePage extends StatefulWidget {
 }
 
 class _homePageState extends State<homePage> {
-
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final productProvider = Provider.of<ProductProvider>(context);
     return Scaffold(
-     
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal:0),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const SizedBox(height: 16),
               SizedBox(
                 height: size.height * 0.24,
                 child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
                   child: Swiper(
                     itemBuilder: (BuildContext context, int index) {
                       return Image.asset(
@@ -45,7 +44,7 @@ class _homePageState extends State<homePage> {
                     pagination: const SwiperPagination(
                       alignment: Alignment.bottomCenter,
                       builder: DotSwiperPaginationBuilder(
-                        color: Colors.white,
+                        color: Colors.grey,
                         activeColor: Colors.amber,
                       ),
                     ),
@@ -67,35 +66,53 @@ class _homePageState extends State<homePage> {
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: productProvider.getProducts.length < 10
-                          ? productProvider.getProducts.length
-                          : 10,
-                   itemBuilder: (context, index) {
+                        ? productProvider.getProducts.length
+                        : 10,
+                    itemBuilder: (context, index) {
                       return ChangeNotifierProvider.value(
                           value: productProvider.getProducts[index],
                           child: const recentlyAddedWidget());
                     }),
               ),
-              const SizedBox(
-                height: 18,
+              const SizedBox(height: 8),
+              // Services Section
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 4,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    const TitlesTextWidget(
+                      label: "services",
+                      fontSize: 22,
+                    ),
+                    const SizedBox(height: 12),
+                    GridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 4,
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 8,
+                      children: List.generate(AppConstants.categoriesList.length, (index) {
+                        return CategoryRoundedWidget(
+                          image: AppConstants.categoriesList[index].image,
+                          name: AppConstants.categoriesList[index].name,
+                        );
+                      }),
+                    ),
+                  ],
+                ),
               ),
-              const TitlesTextWidget(
-                label: "Services",
-                fontSize: 22,
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              GridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: 4,
-                  children: List.generate(AppConstants.categoriesList.length,
-                      (index) {
-                    return CategoryRoundedWidget(
-                      image: AppConstants.categoriesList[index].image,
-                      name: AppConstants.categoriesList[index].name,
-                    );
-                  }))
+              const SizedBox(height: 24),
             ],
           ),
         ),
