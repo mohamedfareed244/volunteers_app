@@ -66,7 +66,9 @@ class _homePageState extends State<homePage> {
                 height: size.height * 0.2,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                   itemCount: 10,
+                    itemCount: productProvider.getProducts.length < 10
+                          ? productProvider.getProducts.length
+                          : 10,
                    itemBuilder: (context, index) {
                       return ChangeNotifierProvider.value(
                           value: productProvider.getProducts[index],
