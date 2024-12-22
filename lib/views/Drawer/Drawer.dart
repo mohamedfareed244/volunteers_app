@@ -4,7 +4,6 @@ import 'package:volunteers_app/views/privacy_policy.dart';
 import 'package:volunteers_app/views/send_feedback.dart';
 import 'package:volunteers_app/views/settings.dart';
 import 'package:volunteers_app/views/chatPage.dart';
-
 import '../profilePage.dart';
 import '../homePage.dart';
 import '../opportunitiesPage.dart';

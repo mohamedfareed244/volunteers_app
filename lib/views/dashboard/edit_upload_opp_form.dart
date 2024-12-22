@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 import 'package:volunteers_app/controllers/my_app_method.dart';
 import 'package:volunteers_app/models/opp_model.dart';
 import 'package:volunteers_app/views/services/my_validators.dart';
@@ -28,8 +32,10 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
   XFile? _pickedImage;
   bool isEditing = false;
   String? productNetworkImage;
-
   late TextEditingController _titleController, _descriptionController;
+
+  bool _isLoading = false;
+  String? productImageUrl;
 
   @override
   void initState() {
@@ -68,19 +74,75 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
     });
   }
 
-  Future<void> _uploadProduct() async {
+ Future<void> _uploadProduct() async {
+    final isValid = _formKey.currentState!.validate();
+    FocusScope.of(context).unfocus();
     if (_pickedImage == null) {
       MyAppMethods.showErrorORWarningDialog(
         context: context,
-        subtitle: "Please pick up an image",
+        subtitle: "Make sure to pick up an image",
         fct: () {},
       );
-
       return;
     }
-    final isValid = _formKey.currentState!.validate();
-    FocusScope.of(context).unfocus();
-    if (isValid) {}
+   
+    if (isValid) {
+      _formKey.currentState!.save();
+      try {
+        setState(() {
+          _isLoading = true;
+        });
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child("OppImages")
+            .child('${_titleController.text.trim()}.jpg');
+        await ref.putFile(File(_pickedImage!.path));
+        productImageUrl = await ref.getDownloadURL();
+
+        final productID = const Uuid().v4();
+        await FirebaseFirestore.instance
+            .collection("opportunitites")
+            .doc(productID)
+            .set({
+          'oppId': productID,
+          'oppTitle': _titleController.text,
+          'oppImage': productImageUrl,
+          'oppDescription': _descriptionController.text,
+        
+          'createdAt': Timestamp.now(),
+        });
+        Fluttertoast.showToast(
+          msg: "Opportunity has been added",
+          toastLength: Toast.LENGTH_SHORT,
+          textColor: Colors.white,
+        );
+        if (!mounted) return;
+        await MyAppMethods.showErrorORWarningDialog(
+          isError: false,
+          context: context,
+          subtitle: "Clear form?",
+          fct: () {
+            clearForm();
+          },
+        );
+      } on FirebaseException catch (error) {
+        await MyAppMethods.showErrorORWarningDialog(
+          context: context,
+          subtitle: "An error has been occured ${error.message}",
+          fct: () {},
+        );
+      } catch (error) {
+        await MyAppMethods.showErrorORWarningDialog(
+          context: context,
+          subtitle: "An error has been occured $error",
+          fct: () {},
+        );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   Future<void> _editProduct() async {
