@@ -23,6 +23,7 @@ dependencies:
   card_swiper: ^3.0.1
   image_picker: ^1.1.2
   uuid: ^4.5.1
+  dotted_border: ^2.1.0
 
 
 dev_dependencies:
@@ -40,3 +41,4 @@ flutter:
     - assets/images/carousel-1.jpg
     - assets/images/carousel-2.jpg
     - assets/images/about-1.jpg
+    - assets/images/image.png

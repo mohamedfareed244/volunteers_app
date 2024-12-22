@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:volunteers_app/providers/opp_provider.dart';
 import 'package:volunteers_app/services/AuthService.dart';
+import 'package:volunteers_app/views/dashboard/edit_upload_opp_form.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteers_app/views/Drawer/Drawer.dart';
@@ -36,6 +37,8 @@ class MainApp extends StatelessWidget {
           home: drawerr(), 
           routes: {
             OppDetails.routName: (context) => const OppDetails(),
+             EditOrUploadProductScreen.routeName: (context) =>
+                const EditOrUploadProductScreen(),
             // Add more routes here
           },
         ),
