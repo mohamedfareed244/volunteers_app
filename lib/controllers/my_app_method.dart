@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:volunteers_app/views/widgets/title_text.dart';
 
 
-import '../views/widgets/subtitle_text.dart';
 
 
 class MyAppMethods {

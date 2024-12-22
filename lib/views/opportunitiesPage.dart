@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:dynamic_height_grid_view/dynamic_height_grid_view.dart';
+import 'package:provider/provider.dart';
+import 'package:volunteers_app/providers/product_provider.dart';
 import 'package:volunteers_app/views/widgets/title_text.dart';
 import 'package:volunteers_app/views/widgets/oppWidget.dart';
 
@@ -28,6 +30,7 @@ class _opportunitiesPageState extends State<opportunitiesPage> {
 
   @override
   Widget build(BuildContext context) {
+        final productProvider = Provider.of<ProductProvider>(context);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -67,13 +70,16 @@ class _opportunitiesPageState extends State<opportunitiesPage> {
                 const SizedBox(
                   height: 15.0,
                 ),
-                Expanded(
+                  Expanded(
                   child: DynamicHeightGridView(
-                    itemCount: 3,
+                    itemCount: productProvider.getProducts.length,
                     builder: ((context, index) {
-                      return const oppWidget();
+                      return ChangeNotifierProvider.value(
+                        value: productProvider.getProducts[index],
+                        child: const oppWidget(),
+                      );
                     }),
-                    crossAxisCount:1,
+                    crossAxisCount: 2,
                   ),
                 ),
               ],
