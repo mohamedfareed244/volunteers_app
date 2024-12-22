@@ -34,6 +34,7 @@ class MainApp extends StatelessWidget {
         value: AuthService().user, 
         initialData: null,
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           home: drawerr(), 
           routes: {
             OppDetails.routName: (context) => const OppDetails(),
