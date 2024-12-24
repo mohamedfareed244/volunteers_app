@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:volunteers_app/services/AuthService.dart';
+import 'package:volunteers_app/views/Drawer/Drawer.dart';
+import 'package:volunteers_app/views/dashboard/organization_dashboard.dart';
 
 class SignIn extends StatefulWidget {
   final Function? toggleView;
@@ -54,8 +57,7 @@ class _SignInState extends State<SignIn> {
                   fillColor: Colors.white,
                   filled: true,
                 ),
-                validator: (value) =>
-                    value!.isEmpty ? 'Enter an email' : null,
+                validator: (value) => value!.isEmpty ? 'Enter an email' : null,
                 onChanged: (val) {
                   setState(() => email = val);
                 },
@@ -96,7 +98,26 @@ class _SignInState extends State<SignIn> {
                   if (_formkey.currentState!.validate()) {
                     dynamic result = await _authService
                         .signInWithEmailAndPassword(email, password);
-                    if (result == null) {
+                    if (result != null) {
+                      DocumentSnapshot Doc = await FirebaseFirestore
+                          .instance
+                          .collection(
+                              'users') // Adjust for `Organization` if needed
+                          .doc(result.uid)
+                          .get();
+
+                      if (Doc.exists && Doc['role'] == 'user') {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => drawerr()));
+                      } else {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => OrganizationDashboard()));
+                      }
+                    } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('Sign In failed')));
                     }

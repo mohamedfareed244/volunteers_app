@@ -35,6 +35,11 @@ class MainApp extends StatelessWidget {
         initialData: null,
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            appBarTheme: AppBarTheme(
+              backgroundColor: Colors.amber[700],
+            )
+          ),
           home: drawerr(), 
           routes: {
             OppDetails.routName: (context) => const OppDetails(),

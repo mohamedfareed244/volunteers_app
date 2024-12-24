@@ -6,6 +6,7 @@ class UserModel {
   final String lastName;
   final String email;
   final String address;
+  final String role ;
   final DateTime? createdAt;
 
   UserModel({
@@ -14,6 +15,7 @@ class UserModel {
     required this.lastName,
     required this.email,
     required this.address,
+    required this.role,
     this.createdAt,
   });
 
@@ -25,6 +27,7 @@ class UserModel {
       'lastName': lastName,
       'email': email,
       'address': address,
+      'role': role,
       'createdAt': createdAt,
     };
   }
@@ -37,6 +40,7 @@ class UserModel {
       lastName: map.data()!['lastName'],
       email: map.data()!['email'],
       address: map.data()!['address'],
+      role: map.data()!['role'],
       createdAt: (map.data()!['createdAt'] as Timestamp?)?.toDate(),
     );
   }
