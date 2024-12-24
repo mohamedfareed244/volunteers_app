@@ -64,16 +64,17 @@ class _homePageState extends State<homePage> {
               SizedBox(
                 height: size.height * 0.2,
                 child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: productProvider.getProducts.length < 10
-                        ? productProvider.getProducts.length
-                        : 10,
-                    itemBuilder: (context, index) {
-                      return ChangeNotifierProvider.value(
-                          value: productProvider.getProducts[index],
-                          child: const recentlyAddedWidget());
-                    }),
-              ),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: productProvider.getProducts.length < 10
+                          ? productProvider.getProducts.length
+                          : 10,
+                      itemBuilder: (context, index) {
+                        return ChangeNotifierProvider.value(
+                            value: productProvider.getProducts[index],
+                            child: const recentlyAddedWidget());
+                      }),
+                ),
+              
               const SizedBox(height: 8),
               // Services Section
               Container(
@@ -92,22 +93,24 @@ class _homePageState extends State<homePage> {
                 child: Column(
                   children: [
                     const TitlesTextWidget(
-                      label: "services",
+                      label: "Services",
                       fontSize: 22,
                     ),
                     const SizedBox(height: 12),
-                    GridView.count(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount: 4,
-                      mainAxisSpacing: 8,
-                      crossAxisSpacing: 8,
-                      children: List.generate(AppConstants.categoriesList.length, (index) {
-                        return CategoryRoundedWidget(
-                          image: AppConstants.categoriesList[index].image,
-                          name: AppConstants.categoriesList[index].name,
-                        );
-                      }),
+                    SingleChildScrollView(
+                      child: GridView.count(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 8,
+                        crossAxisSpacing: 8,
+                        children: List.generate(AppConstants.categoriesList.length, (index) {
+                          return CategoryRoundedWidget(
+                            image: AppConstants.categoriesList[index].image,
+                            name: AppConstants.categoriesList[index].name,
+                          );
+                        }),
+                      ),
                     ),
                   ],
                 ),

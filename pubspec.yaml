@@ -26,6 +26,7 @@ dependencies:
   dotted_border: ^2.1.0
   fluttertoast: ^8.2.10
   firebase_storage: ^12.3.7
+  google_fonts: ^6.2.1
 
 
 dev_dependencies:
@@ -45,4 +46,5 @@ flutter:
     - assets/images/about-1.jpg
     - assets/images/image.png
     - assets/images/image1.png
+    - assets/images/4207.jpg
 

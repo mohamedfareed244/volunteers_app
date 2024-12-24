@@ -1,21 +1,24 @@
-// import 'package:admin_panel/drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:volunteers_app/services/AuthService.dart';
 
 class OrganizationDashboard extends StatelessWidget {
-   OrganizationDashboard({super.key});
+  OrganizationDashboard({super.key});
 
-final CollectionReference myItems =
+  final CollectionReference myItems =
       FirebaseFirestore.instance.collection("users");
-
+  final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         title: Text("Organization Panel"),
         actions: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.exit_to_app_outlined))
+          IconButton(
+              onPressed: () {
+                _auth.signOut();
+              },
+              icon: Icon(Icons.exit_to_app_outlined))
         ],
       ),
       // drawer: DrawerWidget(),
@@ -65,10 +68,11 @@ final CollectionReference myItems =
                       ),
                     ),
                     SizedBox(height: 4),
-                   StreamBuilder<QuerySnapshot>(
+                    StreamBuilder<QuerySnapshot>(
                       stream: myItems.snapshots(),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return CircularProgressIndicator(); // Loading indicator
                         }
                         if (snapshot.hasError) {
@@ -104,7 +108,6 @@ final CollectionReference myItems =
                           ),
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(color: Colors.orange),
-                            
                           ),
                         ),
                       ],

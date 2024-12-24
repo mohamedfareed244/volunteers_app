@@ -1,18 +1,53 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:volunteers_app/screens/authenticate/Authenticate.dart';
-import 'package:volunteers_app/screens/home/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteers_app/views/Drawer/Drawer.dart';
+import 'package:volunteers_app/views/WelcomeScreen.dart';
+import 'package:volunteers_app/views/dashboard/organization_dashboard.dart';
+
+
 
 class AuthWrapper extends StatelessWidget {
   const AuthWrapper({super.key});
 
+  Future<String?> _getUserRole(String userId) async {
+    final userDoc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    if (userDoc.exists) {
+      return 'user';
+    }
+    final orgDoc = await FirebaseFirestore.instance.collection('Organization').doc(userId).get();
+    if (orgDoc.exists) {
+      return 'organization';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
-    print("usert=rrrrr ${user}");
-    // Return Authenticate or HomeScreen based on user status
-    return user == null ? const Authenticate() : drawerr();
+    print("uuuuser: $user");
+
+    if (user == null) {
+      return const WelcomeScreen();
+    }
+
+    return FutureBuilder<String?>(
+      future: _getUserRole(user.uid),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final role = snapshot.data;
+        if (role == 'user') {
+          return  drawerr(); // Screen for regular users
+        } else if (role == 'organization') {
+          return  OrganizationDashboard(); // Screen for organizations
+        }
+
+        return const Center(child: Text('Role not recognized.'));
+      },
+    );
   }
 }
