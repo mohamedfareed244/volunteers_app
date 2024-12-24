@@ -30,25 +30,22 @@ class _opportunitiesPageState extends State<opportunitiesPage> {
     super.dispose();
   }
 
-
-
- List<ProductModel> productListSearch = [];
+  List<OppModel> productListSearch = [];
   @override
   Widget build(BuildContext context) {
-    final productProvider = Provider.of<ProductProvider>(context);
+    final productProvider = Provider.of<OppProvider>(context);
 
     String? passedCategory =
         ModalRoute.of(context)!.settings.arguments as String?;
 
-    final List<ProductModel> productList = passedCategory == null
-        ? productProvider.getProducts
+    final List<OppModel> productList = passedCategory == null
+        ? productProvider.getOpp
         : productProvider.findByCategory(ctgName: passedCategory);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-         
           body: productList.isEmpty
               ? const Center(
                   child: TitlesTextWidget(label: "No result found"),
@@ -111,8 +108,8 @@ class _opportunitiesPageState extends State<opportunitiesPage> {
                           builder: ((context, index) {
                             return oppWidget(
                               productId: searchTextController.text.isNotEmpty
-                                  ? productListSearch[index].productId
-                                  : productList[index].productId,
+                                  ? productListSearch[index].OppId
+                                  : productList[index].OppId,
                             );
                           }),
                           crossAxisCount: 2,

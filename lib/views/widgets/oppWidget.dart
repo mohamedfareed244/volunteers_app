@@ -26,8 +26,8 @@ class _oppWidgetState extends State<oppWidget> {
   @override
   Widget build(BuildContext context) {
     // final productModelProvider = Provider.of<ProductModel>(context);
-    final productProvider = Provider.of<ProductProvider>(context);
-    final getCurrProduct = productProvider.findByProdId(widget.productId);
+    final productProvider = Provider.of<OppProvider>(context);
+    final getCurrProduct = productProvider.findByOppId(widget.productId);
     Size size = MediaQuery.of(context).size;
     return getCurrProduct == null
         ? const SizedBox.shrink()
@@ -38,7 +38,7 @@ class _oppWidgetState extends State<oppWidget> {
                 await Navigator.pushNamed(
                   context,
                   OppDetails.routName,
-                  arguments: getCurrProduct.productId,
+                  arguments: getCurrProduct.OppId,
                 );
               },
               child: Column(
@@ -46,7 +46,7 @@ class _oppWidgetState extends State<oppWidget> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(30.0),
                     child: FancyShimmerImage(
-                      imageUrl: getCurrProduct.productImage,
+                      imageUrl: getCurrProduct.OppImage,
                       width: double.infinity,
                       height: size.height * 0.22,
                     ),
@@ -59,7 +59,7 @@ class _oppWidgetState extends State<oppWidget> {
                       Flexible(
                         flex: 5,
                         child: TitlesTextWidget(
-                          label: getCurrProduct.productTitle,
+                          label: getCurrProduct.OppTitle,
                           maxLines: 2,
                           fontSize: 18,
                         ),

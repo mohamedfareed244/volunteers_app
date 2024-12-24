@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:volunteers_app/providers/opp_provider.dart';
 import 'package:volunteers_app/services/AuthService.dart';
-import 'package:volunteers_app/views/dashboard/edit_upload_opp_form.dart';
+import 'package:volunteers_app/views/dashboard/upload_opp.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteers_app/views/Drawer/Drawer.dart';
@@ -18,8 +18,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MainApp()
-  );
+  runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {
@@ -29,24 +28,22 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ProductProvider()), 
+        ChangeNotifierProvider(create: (_) => OppProvider()),
       ],
       child: StreamProvider<User?>.value(
-        value: AuthService().user, 
+        value: AuthService().user,
         initialData: null,
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            textTheme: GoogleFonts.poppinsTextTheme(),
-            appBarTheme: AppBarTheme(
-              backgroundColor: Colors.amber[700],
-            )
-          ),
-          home: const AuthWrapper(), 
+              textTheme: GoogleFonts.poppinsTextTheme(),
+              appBarTheme: AppBarTheme(
+                backgroundColor: Colors.amber[700],
+              )),
+          home: drawerr(),
           routes: {
             OppDetails.routName: (context) => const OppDetails(),
-             EditOrUploadProductScreen.routeName: (context) =>
-                const EditOrUploadProductScreen(),
+            UploadOpp.routeName: (context) => const UploadOpp(),
             // Add more routes here
           },
         ),

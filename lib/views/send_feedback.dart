@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:volunteers_app/views/dashboard/edit_upload_opp_form.dart';
-
+import 'package:volunteers_app/views/dashboard/upload_opp.dart';
 
 class SendFeedbackPage extends StatefulWidget {
   @override
@@ -12,7 +11,7 @@ class _SendFeedbackPageState extends State<SendFeedbackPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Send Feedback"), 
+        title: Text("Send Feedback"),
       ),
       body: Center(
         child: Column(
@@ -24,7 +23,7 @@ class _SendFeedbackPageState extends State<SendFeedbackPage> {
               onPressed: () {
                 Navigator.pushNamed(
                   context,
-                  EditOrUploadProductScreen.routeName,
+                  UploadOpp.routeName,
                 );
               },
               child: Text("Go to Edit/Upload opp"),

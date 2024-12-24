@@ -12,7 +12,6 @@ import 'package:volunteers_app/views/services/assets_manager.dart';
 import 'package:volunteers_app/views/services/app_constants.dart';
 import 'package:volunteers_app/views/widgets/ctg_rounded_widget.dart';
 
-
 class OppDetails extends StatefulWidget {
   static const routName = '/OpportunityDetails';
   const OppDetails({super.key});
@@ -22,17 +21,15 @@ class OppDetails extends StatefulWidget {
 }
 
 class _OppDetailsState extends State<OppDetails> {
- @override
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    final productProvider =
-        Provider.of<ProductProvider>(context, listen: false);
-    final productId = ModalRoute.of(context)!.settings.arguments as String;
-    final getCurrProduct = productProvider.findByProdId(productId);
+    final oppProvider = Provider.of<OppProvider>(context, listen: false);
+    final oppId = ModalRoute.of(context)!.settings.arguments as String;
+    final getCurrOpp = oppProvider.findByOppId(oppId);
     return Scaffold(
       appBar: AppBar(
-       
         centerTitle: true,
         leading: IconButton(
             onPressed: () {
@@ -44,13 +41,13 @@ class _OppDetailsState extends State<OppDetails> {
             )),
         // automaticallyImplyLeading: false,
       ),
-      body: getCurrProduct == null
+      body: getCurrOpp == null
           ? const SizedBox.shrink()
           : SingleChildScrollView(
               child: Column(
                 children: [
                   FancyShimmerImage(
-                    imageUrl: getCurrProduct.productImage,
+                    imageUrl: getCurrOpp.OppImage,
                     height: size.height * 0.38,
                     width: double.infinity,
                     boxFit: BoxFit.contain,
@@ -68,7 +65,7 @@ class _OppDetailsState extends State<OppDetails> {
                             Flexible(
                               // flex: 5,
                               child: Text(
-                                getCurrProduct.productTitle,
+                                getCurrOpp.OppTitle,
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -78,7 +75,6 @@ class _OppDetailsState extends State<OppDetails> {
                             const SizedBox(
                               width: 14,
                             ),
-                           
                           ],
                         ),
                         const SizedBox(
@@ -108,7 +104,7 @@ class _OppDetailsState extends State<OppDetails> {
                                       ),
                                     ),
                                     onPressed: () {},
-                                   icon: const Icon(Icons.volunteer_activism),
+                                    icon: const Icon(Icons.volunteer_activism),
                                     label: const Text(
                                       "Apply Now",
                                     ),
@@ -124,15 +120,15 @@ class _OppDetailsState extends State<OppDetails> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const TitlesTextWidget(label: "About this Opportunity"),
-                          
+                            const TitlesTextWidget(
+                                label: "About this Opportunity"),
                           ],
                         ),
                         const SizedBox(
                           height: 25,
                         ),
                         SubtitleTextWidget(
-                          label: getCurrProduct.productDescription,
+                          label: getCurrOpp.OppDescription,
                         ),
                       ],
                     ),

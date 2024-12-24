@@ -18,7 +18,7 @@ class _homePageState extends State<homePage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final productProvider = Provider.of<ProductProvider>(context);
+    final productProvider = Provider.of<OppProvider>(context);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -64,17 +64,17 @@ class _homePageState extends State<homePage> {
               SizedBox(
                 height: size.height * 0.2,
                 child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: productProvider.getProducts.length < 10
-                          ? productProvider.getProducts.length
-                          : 10,
-                      itemBuilder: (context, index) {
-                        return ChangeNotifierProvider.value(
-                            value: productProvider.getProducts[index],
-                            child: const recentlyAddedWidget());
-                      }),
-                ),
-              
+                    scrollDirection: Axis.horizontal,
+                    itemCount: productProvider.getOpp.length < 10
+                        ? productProvider.getOpp.length
+                        : 10,
+                    itemBuilder: (context, index) {
+                      return ChangeNotifierProvider.value(
+                          value: productProvider.getOpp[index],
+                          child: const recentlyAddedWidget());
+                    }),
+              ),
+
               const SizedBox(height: 8),
               // Services Section
               Container(
@@ -104,7 +104,8 @@ class _homePageState extends State<homePage> {
                         crossAxisCount: 3,
                         mainAxisSpacing: 8,
                         crossAxisSpacing: 8,
-                        children: List.generate(AppConstants.categoriesList.length, (index) {
+                        children: List.generate(
+                            AppConstants.categoriesList.length, (index) {
                           return CategoryRoundedWidget(
                             image: AppConstants.categoriesList[index].image,
                             name: AppConstants.categoriesList[index].name,

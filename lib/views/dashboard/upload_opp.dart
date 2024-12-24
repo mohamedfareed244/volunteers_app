@@ -14,40 +14,39 @@ import 'dart:io';
 
 import '../widgets/title_text.dart';
 
-class EditOrUploadProductScreen extends StatefulWidget {
-  static const routeName = '/EditOrUploadProductScreen';
+class UploadOpp extends StatefulWidget {
+  static const routeName = '/UploadOpp';
 
-  const EditOrUploadProductScreen({
+  const UploadOpp({
     super.key,
-    this.productModel,
+    this.oppModel,
   });
-  final ProductModel? productModel;
+  final OppModel? oppModel;
   @override
-  State<EditOrUploadProductScreen> createState() =>
-      _EditOrUploadProductScreenState();
+  State<UploadOpp> createState() => _UploadOppState();
 }
 
-class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
+class _UploadOppState extends State<UploadOpp> {
   final _formKey = GlobalKey<FormState>();
   XFile? _pickedImage;
   bool isEditing = false;
-  String? productNetworkImage;
+  String? oppNetworkImage;
   late TextEditingController _titleController, _descriptionController;
 
   bool _isLoading = false;
-  String? productImageUrl;
+  String? oppImageUrl;
 
   @override
   void initState() {
-    if (widget.productModel != null) {
+    if (widget.oppModel != null) {
       isEditing = true;
-      productNetworkImage = widget.productModel!.productImage;
+      oppNetworkImage = widget.oppModel!.OppImage;
     }
     _titleController =
-        TextEditingController(text: widget.productModel?.productTitle);
+        TextEditingController(text: widget.oppModel?.OppTitle);
 
     _descriptionController =
-        TextEditingController(text: widget.productModel?.productDescription);
+        TextEditingController(text: widget.oppModel?.OppDescription);
 
     super.initState();
   }
@@ -70,11 +69,11 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
   void removePickedImage() {
     setState(() {
       _pickedImage = null;
-      productNetworkImage = null;
+      oppNetworkImage = null;
     });
   }
 
- Future<void> _uploadProduct() async {
+  Future<void> _uploadOpp() async {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
     if (_pickedImage == null) {
@@ -85,7 +84,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
       );
       return;
     }
-   
+
     if (isValid) {
       _formKey.currentState!.save();
       try {
@@ -97,18 +96,17 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
             .child("OppImages")
             .child('${_titleController.text.trim()}.jpg');
         await ref.putFile(File(_pickedImage!.path));
-        productImageUrl = await ref.getDownloadURL();
+        oppImageUrl = await ref.getDownloadURL();
 
-        final productID = const Uuid().v4();
+        final oppID = const Uuid().v4();
         await FirebaseFirestore.instance
             .collection("opportunitites")
-            .doc(productID)
+            .doc(oppID)
             .set({
-          'oppId': productID,
+          'oppId': oppID,
           'oppTitle': _titleController.text,
-          'oppImage': productImageUrl,
+          'oppImage': oppImageUrl,
           'oppDescription': _descriptionController.text,
-        
           'createdAt': Timestamp.now(),
         });
         Fluttertoast.showToast(
@@ -145,10 +143,10 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
     }
   }
 
-  Future<void> _editProduct() async {
+  Future<void> _editOpp() async {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
-    if (_pickedImage == null && productNetworkImage == null) {
+    if (_pickedImage == null && oppNetworkImage == null) {
       MyAppMethods.showErrorORWarningDialog(
         context: context,
         subtitle: "Please pick up an image",
@@ -232,9 +230,9 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                   ),
                   onPressed: () {
                     if (isEditing) {
-                      _editProduct();
+                      _editOpp();
                     } else {
-                      _uploadProduct();
+                      _uploadOpp();
                     }
                   },
                 ),
@@ -255,11 +253,11 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                if (isEditing && productNetworkImage != null) ...[
+                if (isEditing && oppNetworkImage != null) ...[
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.network(
-                      productNetworkImage!,
+                      oppNetworkImage!,
                       height: size.width * 0.5,
                       alignment: Alignment.center,
                     ),
@@ -304,7 +302,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                     ),
                   ),
                 ],
-                if (_pickedImage != null && productNetworkImage != null) ...[
+                if (_pickedImage != null && oppNetworkImage != null) ...[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -348,7 +346,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                             hintText: 'Opportunity Title',
                           ),
                           validator: (value) {
-                            return MyValidators.uploadProdTexts(
+                            return MyValidators.uploadOppTexts(
                               value: value,
                               toBeReturnedString: "Please enter a valid title",
                             );
@@ -369,7 +367,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                             hintText: 'Opportunity description',
                           ),
                           validator: (value) {
-                            return MyValidators.uploadProdTexts(
+                            return MyValidators.uploadOppTexts(
                               value: value,
                               toBeReturnedString: "Description is missed",
                             );

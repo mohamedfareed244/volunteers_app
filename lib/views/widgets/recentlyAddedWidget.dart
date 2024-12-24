@@ -13,16 +13,16 @@ class recentlyAddedWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final productsModel = Provider.of<ProductModel>(context);
+    final productsModel = Provider.of<OppModel>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         onTap: () async {
-         await Navigator.pushNamed(
-                  context,
-                  OppDetails.routName,
-                  arguments: productsModel.productId,
-                );
+          await Navigator.pushNamed(
+            context,
+            OppDetails.routName,
+            arguments: productsModel.OppId,
+          );
         },
         child: SizedBox(
           width: size.width * 0.45,
@@ -33,7 +33,7 @@ class recentlyAddedWidget extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: FancyShimmerImage(
-                    imageUrl: productsModel.productImage,
+                    imageUrl: productsModel.OppImage,
                     width: size.width * 0.28,
                     height: size.width * 0.28,
                   ),
@@ -47,7 +47,7 @@ class recentlyAddedWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      productsModel.productTitle,
+                      productsModel.OppTitle,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -58,7 +58,7 @@ class recentlyAddedWidget extends StatelessWidget {
                           IconButton(
                             onPressed: () {},
                             icon: const Icon(
-                             Icons.volunteer_activism,
+                              Icons.volunteer_activism,
                               size: 18,
                             ),
                           ),
