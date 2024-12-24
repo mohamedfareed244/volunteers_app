@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:volunteers_app/screens/Home/home.dart';
-import 'package:volunteers_app/screens/authenticate/registerOrg.dart';
 import 'package:volunteers_app/screens/authenticate/sign_in.dart';
 import 'package:volunteers_app/services/AuthService.dart';
+import 'package:volunteers_app/views/dashboard/edit_organization.dart';
 
-class Register extends StatefulWidget {
-  final Function? toggleView;
-  Register({this.toggleView});
+class RegisterOrg extends StatefulWidget {
+  const RegisterOrg({super.key});
 
   @override
-  State<Register> createState() => _RegisterState();
+  State<RegisterOrg> createState() => _RegisterOrgState();
 }
 
-class _RegisterState extends State<Register> {
-  final AuthService _authService = AuthService();
+class _RegisterOrgState extends State<RegisterOrg> {
+ final AuthService _authService = AuthService();
   final _formKey = GlobalKey<FormState>();
 
-  // User input fields
-  String firstName = '';
-  String lastName = '';
+  // Organization input fields
+  String name = '';
   String email = '';
   String password = '';
-  String address = '';
+  String description = '';
+  String contactNumber = '';
   String error = '';
   bool loading = false;
 
@@ -32,7 +31,7 @@ class _RegisterState extends State<Register> {
       appBar: AppBar(
         backgroundColor: Colors.orange[700],
         elevation: 5.0,
-        title: Text('Sign Up to Volunteens',
+        title: Text('Sign Up to Organization',
             style: TextStyle(fontWeight: FontWeight.bold)),
         actions: <Widget>[
           TextButton.icon(
@@ -42,8 +41,8 @@ class _RegisterState extends State<Register> {
                     color: Colors.white, fontWeight: FontWeight.bold)),
             onPressed: () {
               // widget.toggleView!();
-
              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> SignIn()));
+
             },
           ),
         ],
@@ -59,21 +58,20 @@ class _RegisterState extends State<Register> {
                     children: <Widget>[
                       SizedBox(height: 20.0),
                       buildTextFormField(
-                          'First Name', Icons.person, (val) => firstName = val),
+                          'Name', Icons.person, (val) => name = val),
                       SizedBox(height: 20.0),
-                      buildTextFormField('Last Name', Icons.person_outline,
-                          (val) => lastName = val),
-                      SizedBox(height: 20.0),
-                      buildTextFormField(
-                          'Email', Icons.email, (val) => email = val,
-                          isEmail: true),
+                      buildTextFormField('Email', Icons.email,
+                          (val) => email = val, isEmail: true),
                       SizedBox(height: 20.0),
                       buildTextFormField(
                           'Password', Icons.lock, (val) => password = val,
                           obscureText: true),
                       SizedBox(height: 20.0),
                       buildTextFormField(
-                          'Address', Icons.home, (val) => address = val),
+                          'Description', Icons.description, (val) => description = val,maxlines: 5),
+                      SizedBox(height: 20.0),
+                      buildTextFormField(
+                          'Contact Number', Icons.phone_outlined, (val) => contactNumber = val),
                       SizedBox(height: 30.0),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -84,11 +82,14 @@ class _RegisterState extends State<Register> {
                         ),
                         child: SizedBox(
                           width: double.infinity,
-                          child: Text('Sign Up',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold),textAlign:TextAlign.center,),
+                          child: Center(
+                            child: Text('Sign Up',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold),
+                                     textAlign: TextAlign.center,),
+                          ),
                         ),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
@@ -96,12 +97,12 @@ class _RegisterState extends State<Register> {
 
                             // Register the user with all input fields
                             dynamic result =
-                                await _authService.registerWithEmailAndPassword(
+                                await _authService.registerWithEmailAndPasswordOrg(
                               email,
                               password,
-                              firstName,
-                              lastName,
-                              address,
+                              name,
+                              description,
+                              contactNumber,
                             );
 
                             setState(() => loading = false);
@@ -110,8 +111,8 @@ class _RegisterState extends State<Register> {
                               setState(() =>
                                   error = 'Registration failed. Try again.');
                             } else {
-                  Navigator.push(context,MaterialPageRoute(builder: (context)=> Home()));
-                              print("User registered: ${result.uid}");
+                              Navigator.push(context,MaterialPageRoute(builder: (context)=> Orgprofile()));
+                              print("User registered: ${result.id}");
                             }
                           }
                         },
@@ -122,9 +123,7 @@ class _RegisterState extends State<Register> {
                         style: TextStyle(color: Colors.red, fontSize: 14.0),
                       ),
                       SizedBox(height: 20.0),
-                      TextButton(onPressed: (){
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> RegisterOrg()));
-                      }, child: Text("Register as Organization",style: TextStyle(color: Colors.indigo[900], decoration: TextDecoration.underline,),))
+                      
                     ],
                   ),
                 ),
@@ -135,7 +134,7 @@ class _RegisterState extends State<Register> {
 
   Widget buildTextFormField(
       String label, IconData icon, Function(String) onChanged,
-      {bool obscureText = false, bool isEmail = false}) {
+      {bool obscureText = false, bool isEmail = false,int maxlines=1}) {
     return TextFormField(
       decoration: InputDecoration(
         labelText: label,
@@ -147,6 +146,7 @@ class _RegisterState extends State<Register> {
       ),
       obscureText: obscureText,
       keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
+      maxLines: maxlines,
       validator: (value) {
         if (value!.isEmpty) {
           return 'Enter your $label';

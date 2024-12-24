@@ -1,5 +1,6 @@
-
 import 'package:flutter/material.dart';
+import 'package:volunteers_app/screens/authenticate/register.dart';
+import 'package:volunteers_app/screens/authenticate/registerOrg.dart';
 import 'package:volunteers_app/views/privacy_policy.dart';
 import 'package:volunteers_app/views/send_feedback.dart';
 import 'package:volunteers_app/views/settings.dart';
@@ -10,13 +11,72 @@ import '../opportunitiesPage.dart';
 import 'my_drawer_header.dart';
 import '../notifications.dart';
 
-
 class drawerr extends StatefulWidget {
   @override
   _drawerrState createState() => _drawerrState();
 }
 
 class _drawerrState extends State<drawerr> {
+ void _showRegistrationDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Center(
+          child: Text(
+            "Register as",
+            textAlign: TextAlign.center,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 10),
+            Text(
+              "Choose your role",
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Register(),
+                    ),
+                  );
+                },
+                child: Text("User"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RegisterOrg(),
+                    ),
+                  );
+                },
+                child: Text("Organization"),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
+
   var currentPage = DrawerSections.home;
 
   @override
@@ -41,8 +101,19 @@ class _drawerrState extends State<drawerr> {
     }
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amber[700],
-        title:Text("Volunteens", style: TextStyle(fontWeight: FontWeight.bold, fontStyle: FontStyle.italic, color: const Color.fromARGB(255, 0, 0, 0))),
+        title: Text("Volunteens",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontStyle: FontStyle.italic,
+                color: const Color.fromARGB(255, 0, 0, 0))),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.person_add_alt_1_outlined),
+            onPressed: () {
+              _showRegistrationDialog(context);
+            },
+          ),
+        ],
       ),
       body: container,
       drawer: Drawer(
@@ -76,8 +147,6 @@ class _drawerrState extends State<drawerr> {
               currentPage == DrawerSections.opportunities ? true : false),
           menuItem(4, "chat", Icons.chat,
               currentPage == DrawerSections.chat ? true : false),
-        
-        
           Divider(),
           menuItem(5, "Settings", Icons.settings_outlined,
               currentPage == DrawerSections.settings ? true : false),
@@ -95,7 +164,7 @@ class _drawerrState extends State<drawerr> {
 
   Widget menuItem(int id, String title, IconData icon, bool selected) {
     return Material(
-      color: selected ?  Colors.grey[300] : Colors.transparent,
+      color: selected ? Colors.grey[300] : Colors.transparent,
       child: InkWell(
         onTap: () {
           Navigator.pop(context);

@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +19,10 @@ class _OrgprofileState extends State<Orgprofile> {
 
 //get single the organization data
 
-  Future<Organization> getOrganization(String email) async {
-    final snapshot = await _db.where('Email', isEqualTo: email).get();
-    final orgData =
-        snapshot.docs.map((doc) => Organization.fromSnapshot(doc)).single;
+  Future<Organization> getOrganization(String Useruid) async {
+
+    final snapshot = await _db.doc(Useruid).get();//json firsestore
+    final orgData = Organization.fromSnapshot(snapshot);
     return orgData;
   }
 
@@ -39,19 +38,20 @@ class _OrgprofileState extends State<Orgprofile> {
   // Function to get the current user's email from Firebase Authentication
   Future<Organization?> fetchOrganizationData() async {
     try {
-      User? user = _auth.currentUser;
+      User? user = _auth.currentUser; 
       if (user != null) {
-        String email = user.email ?? ''; // Get the email of the current user
-        if (email.isNotEmpty) {
+        String Useruid = user.uid ?? ''; // Get the email of the current user
+        if (Useruid.isNotEmpty) {
           // Call the getOrganization function with the email
           try {
-            Organization org = await getOrganization(email);
+           
+            Organization org = await getOrganization(Useruid);
             print('Organization data fetched for email: ${org.toJson()}');
             return org;
             // Successfully fetched organization data
           } catch (e) {
             // Error while fetching organization data
-            print('Error fetching organization data for email "$email": $e');
+            print('Error fetching organization data for email "$Useruid": $e');
           }
         } else {
           print('Error: Email is empty.');
@@ -126,7 +126,7 @@ class _OrgprofileState extends State<Orgprofile> {
                               radius: 60, // Adjust the size
                               // Placeholder color
                               backgroundImage: _imageFile == null
-                                  ? AssetImage('lib/assets/images/image.png')
+                                  ? AssetImage('assets/images/image1.png')
                                   : FileImage(_imageFile!),
                             ),
                           ),
@@ -214,6 +214,7 @@ class _OrgprofileState extends State<Orgprofile> {
                                     contactNumber:
                                         _contactNumberController.text,
                                     imageUrl: org.imageUrl,
+                                    role: org.role,
                                   );
                                   await saveChanges(UpadtedOrg);
                                 },
@@ -234,22 +235,17 @@ class _OrgprofileState extends State<Orgprofile> {
                               children: [
                                 Text.rich(
                                   TextSpan(
-                                    text: "Joined",
-                                    style: TextStyle(
-                                       fontSize: 12),
-                                       children: [
+                                      text: "Joined",
+                                      style: TextStyle(fontSize: 12),
+                                      children: [
                                         TextSpan(
-                                          text: " 2/12/2024",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 12,
-                                          )
-                                        )
-                                       ]
-                                  ),
-                                  
+                                            text: " 2/12/2024",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                            ))
+                                      ]),
                                 ),
-                                
                                 Expanded(
                                   child: TextButton.icon(
                                     onPressed: () async {
