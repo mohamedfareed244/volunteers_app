@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:volunteers_app/providers/opp_provider.dart';
 import 'package:volunteers_app/services/AuthService.dart';
@@ -36,11 +37,12 @@ class MainApp extends StatelessWidget {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
+            textTheme: GoogleFonts.poppinsTextTheme(),
             appBarTheme: AppBarTheme(
               backgroundColor: Colors.amber[700],
             )
           ),
-          home: drawerr(), 
+          home: const AuthWrapper(), 
           routes: {
             OppDetails.routName: (context) => const OppDetails(),
              EditOrUploadProductScreen.routeName: (context) =>

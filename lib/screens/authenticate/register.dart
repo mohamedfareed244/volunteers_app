@@ -3,6 +3,7 @@ import 'package:volunteers_app/screens/Home/home.dart';
 import 'package:volunteers_app/screens/authenticate/registerOrg.dart';
 import 'package:volunteers_app/screens/authenticate/sign_in.dart';
 import 'package:volunteers_app/services/AuthService.dart';
+import 'package:volunteers_app/views/Drawer/Drawer.dart';
 
 class Register extends StatefulWidget {
   final Function? toggleView;
@@ -110,7 +111,7 @@ class _RegisterState extends State<Register> {
                               setState(() =>
                                   error = 'Registration failed. Try again.');
                             } else {
-                  Navigator.push(context,MaterialPageRoute(builder: (context)=> Home()));
+                  Navigator.push(context,MaterialPageRoute(builder: (context)=> drawerr()));
                               print("User registered: ${result.uid}");
                             }
                           }

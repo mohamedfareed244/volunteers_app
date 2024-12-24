@@ -5,8 +5,7 @@ import 'package:volunteers_app/views/Drawer/Drawer.dart';
 import 'package:volunteers_app/views/dashboard/organization_dashboard.dart';
 
 class SignIn extends StatefulWidget {
-  final Function? toggleView;
-  SignIn({this.toggleView});
+  SignIn({super.key});
 
   @override
   State<SignIn> createState() => _SignInState();
@@ -24,7 +23,7 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       backgroundColor: Colors.orange[50],
       appBar: AppBar(
-        backgroundColor: Colors.orange[600],
+        
         elevation: 0.0,
         title: Text(
           'Sign In to Volunteens',
@@ -35,7 +34,7 @@ class _SignInState extends State<SignIn> {
             icon: Icon(Icons.person, color: Colors.white),
             label: Text('Register', style: TextStyle(color: Colors.white)),
             onPressed: () {
-              widget.toggleView!();
+              
             },
           ),
         ],
@@ -90,9 +89,12 @@ class _SignInState extends State<SignIn> {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-                child: Text(
-                  'Sign In',
-                  style: TextStyle(color: Colors.white, fontSize: 16.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    'Sign In',
+                    style: TextStyle(color: Colors.white, fontSize: 16.0),
+                  ),
                 ),
                 onPressed: () async {
                   if (_formkey.currentState!.validate()) {

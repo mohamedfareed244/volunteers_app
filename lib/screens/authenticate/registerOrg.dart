@@ -29,7 +29,6 @@ class _RegisterOrgState extends State<RegisterOrg> {
     return Scaffold(
       backgroundColor: Colors.orange[50],
       appBar: AppBar(
-        backgroundColor: Colors.orange[700],
         elevation: 5.0,
         title: Text('Sign Up to Organization',
             style: TextStyle(fontWeight: FontWeight.bold)),
@@ -78,7 +77,8 @@ class _RegisterOrgState extends State<RegisterOrg> {
                           backgroundColor: Colors.orange[600],
                           padding: EdgeInsets.symmetric(vertical: 15.0),
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0)),
+                              borderRadius: BorderRadius.circular(8.0),
+                              ),
                         ),
                         child: SizedBox(
                           width: double.infinity,
