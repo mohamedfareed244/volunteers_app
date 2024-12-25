@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:volunteers_app/models/organization.dart';
 import 'package:volunteers_app/services/AuthService.dart';
 import 'package:volunteers_app/views/WelcomeScreen.dart';
 
@@ -8,103 +12,186 @@ class OrganizationDashboard extends StatelessWidget {
 
   final CollectionReference myItems =
       FirebaseFirestore.instance.collection("users");
+
+  final opportunities = FirebaseFirestore.instance.collection("opportunitites");
   final AuthService _auth = AuthService();
+
+  Future<Organization?> getOrganization(User user) async {
+    final orgDoc = await FirebaseFirestore.instance
+        .collection('Organization')
+        .doc(user.uid)
+        .get();
+    if (orgDoc.exists) {
+      try {
+        return Organization.fromSnapshot(orgDoc);
+      } catch (Error) {
+        print('Error $Error');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User?>(context);
     return Scaffold(
-      // drawer: DrawerWidget(),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Admin Information Card
-            Card(
-              elevation: 3,
-              child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Organization Information",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+            SizedBox(height: 16),
+            Center(
+              child: Card(
+                elevation: 3,
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CircleAvatar(
+                        radius: 40,
+                        backgroundColor: Colors.orange,
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.white,
+                          size: 40,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 8),
-                    Text("Name: Resala "),
-                    Text("Email: Resala@gmail.com"),
-                  ],
+                      SizedBox(width: 16),
+                      FutureBuilder(
+                          future: getOrganization(user!),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator(color: Colors.amber,);
+                            }
+                            if (snapshot.hasError) {
+                              return SnackBar(content: Text("Error loading data"),backgroundColor: Colors.red,);
+                            }
+                            final org = snapshot.data as Organization;
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Organization Information",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text("Name: ${org.name}",style: TextStyle(fontSize: 14,color: Colors.grey[600]),),
+                                SizedBox(height: 4),
+                                Text("Email: ${org.email}",style: TextStyle(fontSize: 14,color: Colors.grey[600])),
+                              ],
+                            );
+                          })
+                    ],
+                  ),
                 ),
               ),
             ),
 
-            SizedBox(height: 16),
+            SizedBox(height: 20),
 
-            // Total Customers & Buttons Section
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: Text('OverView',style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
+            ),
+            SizedBox(height: 10,),
+
+            // Total Volunteers and Total Opportunites
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Total Customers
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Total number of volunteers",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[700],
+                Expanded(
+                  child: Card(
+                    elevation: 3,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Total volunteer ",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          StreamBuilder<QuerySnapshot>(
+                            stream: myItems.snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return CircularProgressIndicator(color: Colors.amber,); // Loading indicator
+                              }
+                              if (snapshot.hasError) {
+                                return Text("Error loading data");
+                              }
+                              // Get the document count
+                              int volunteerCount =
+                                  snapshot.data?.docs.length ?? 0;
+                              return Text(
+                                "$volunteerCount",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 28,
+                                ),
+                              );
+                            },
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(height: 4),
-                    StreamBuilder<QuerySnapshot>(
-                      stream: myItems.snapshots(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return CircularProgressIndicator(); // Loading indicator
-                        }
-                        if (snapshot.hasError) {
-                          return Text("Error loading data");
-                        }
-                        // Get the document count
-                        int volunteerCount = snapshot.data?.docs.length ?? 0;
-                        return Text(
-                          "$volunteerCount",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 28,
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-
-                // Buttons Section - Prevent overflow
-                Flexible(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Column(
-                      children: [
-                        SizedBox(width: 8),
-                        OutlinedButton.icon(
-                          onPressed: () {},
-                          icon: Icon(Icons.add, color: Colors.orange),
-                          label: Text(
-                            "Add New Opportunity",
-                            style: TextStyle(color: Colors.orange),
-                          ),
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: Colors.orange),
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                 ),
+                Expanded(
+                  child: Card(
+                    elevation: 3,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Total opportunitites",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          StreamBuilder<QuerySnapshot>(
+                            stream: opportunities.snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return CircularProgressIndicator(color: Colors.amber,); // Loading indicator
+                              }
+                              if (snapshot.hasError) {
+                                return Text("Error loading data");
+                              }
+                              // Get the document count
+                              int opportunitesCount =
+                                  snapshot.data?.docs.length ?? 0;
+                              return Text(
+                                "$opportunitesCount",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 28,
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
 
@@ -126,29 +213,37 @@ class OrganizationDashboard extends StatelessWidget {
               child: Table(
                 border: TableBorder.all(color: Colors.grey[300]!),
                 columnWidths: {
-                  0: FlexColumnWidth(1),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                  3: FlexColumnWidth(1),
+                  0: FlexColumnWidth(4),
+                  1: FlexColumnWidth(4),
+                  2: FlexColumnWidth(5),
+                  3: FlexColumnWidth(3),
                 },
                 children: [
                   TableRow(
                     decoration: BoxDecoration(color: Colors.grey[200]),
                     children: [
-                      tableCell("Donor Name", true),
-                      tableCell("Donor Email", true),
-                      tableCell("Amount", true),
+                      tableCell("Volunteer Name", true),
+                      tableCell("Volunteer Email", true),
+                      tableCell("Opportunity", true),
                       tableCell("Status", true),
                     ],
                   ),
+                  
                   TableRow(
-                    children: [
-                      tableCell("Nouran Mohamed"),
-                      tableCell("Nouran211018@miuegypt.edu.eg"),
-                      tableCell("200 USD"), // Added sample amount
-                      tableCell("Completed"),
-                    ],
-                  ),
+        children: [
+          tableCell("John Doe"),
+          tableCell("john.doe@example.com"),
+          tableCell("Clean Up Drive"),
+          tableCell("Completed"),
+        ],
+      ), TableRow(
+        children: [
+          tableCell("Jane Smith"),
+          tableCell("jane.smith@example.com"),
+          tableCell("Food Distribution"),
+          tableCell("Pending"),
+        ],
+      ),
                 ],
               ),
             ),
