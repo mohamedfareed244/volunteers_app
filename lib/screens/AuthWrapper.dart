@@ -46,7 +46,16 @@ class AuthWrapper extends StatelessWidget {
           return  OrganizationDashboard(); // Screen for organizations
         }
 
-        return const Center(child: Text('Role not recognized.'));
+              // Role not recognized, log out the user
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          await FirebaseAuth.instance.signOut();
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+            (route) => false,//removes all the existing routes from the stack
+          );
+        });
+
+        return const Center(child: Text('Logging out...'));
       },
     );
   }
