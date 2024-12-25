@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:volunteers_app/screens/authenticate/register.dart';
+import 'package:volunteers_app/screens/authenticate/registerOrg.dart';
 import 'package:volunteers_app/services/AuthService.dart';
 import 'package:volunteers_app/views/Drawer/Drawer.dart';
 import 'package:volunteers_app/views/dashboard/organization_dashboard.dart';
@@ -18,6 +20,66 @@ class _SignInState extends State<SignIn> {
   String email = '';
   String password = '';
 
+  void _showRegistrationDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Center(
+          child: Text(
+            "Register as",
+            textAlign: TextAlign.center,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 10),
+            Text(
+              "Choose your role",
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Register(),
+                    ),
+                  );
+                },
+                child: Text("User"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RegisterOrg(),
+                    ),
+                  );
+                },
+                child: Text("Organization"),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +96,7 @@ class _SignInState extends State<SignIn> {
             icon: Icon(Icons.person, color: Colors.white),
             label: Text('Register', style: TextStyle(color: Colors.white)),
             onPressed: () {
-              
+                _showRegistrationDialog(context);
             },
           ),
         ],
@@ -92,7 +154,7 @@ class _SignInState extends State<SignIn> {
                 child: SizedBox(
                   width: double.infinity,
                   child: Text(
-                    'Sign In',
+                    'Sign In',textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.white, fontSize: 16.0),
                   ),
                 ),
