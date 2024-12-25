@@ -12,37 +12,8 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
-      child: Container(
-        child: Center(
-          child: 
-              Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Orgprofile(),
-                        ),
-                      );
-                    },
-                    child: Text("Go to   Organization Profile"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => OrganizationDashboard(),
-                        ),
-                      );
-                    },
-                    child: Text("Go to   OrganizationDashboard "),
-                  ),
-                ],
-              ),
-        ),
-      ),
+        child: Center(), 
+              
     );
   }
 }
