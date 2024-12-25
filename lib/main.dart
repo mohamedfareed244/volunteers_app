@@ -40,7 +40,7 @@ class MainApp extends StatelessWidget {
               appBarTheme: AppBarTheme(
                 backgroundColor: Colors.amber[700],
               )),
-          home: drawerr(),
+          home: const AuthWrapper(),
           routes: {
             OppDetails.routName: (context) => const OppDetails(),
             UploadOpp.routeName: (context) => const UploadOpp(),

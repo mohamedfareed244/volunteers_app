@@ -42,10 +42,19 @@ class _homePageState extends State<homePage> {
     super.didChangeDependencies();
   }
 
+
+
+
+   final List<String> imageUrls = [
+    'assets/images/courses-1.jpg',
+    'assets/images/courses-2.jpg',
+    'assets/images/courses-3.jpg',
+  ];
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final productProvider = Provider.of<OppProvider>(context);
+    final oppProvider = Provider.of<OppProvider>(context);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -62,12 +71,12 @@ class _homePageState extends State<homePage> {
                   child: Swiper(
                     itemBuilder: (BuildContext context, int index) {
                       return Image.asset(
-                        'assets/images/carousel-1.jpg',
+                        imageUrls[index],
                         fit: BoxFit.fill,
                       );
                     },
                     autoplay: true,
-                    itemCount: 3,
+                    itemCount: imageUrls.length,
                     pagination: const SwiperPagination(
                       alignment: Alignment.bottomCenter,
                       builder: DotSwiperPaginationBuilder(
@@ -92,12 +101,12 @@ class _homePageState extends State<homePage> {
                 height: size.height * 0.2,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: productProvider.getOpp.length < 10
-                        ? productProvider.getOpp.length
+                    itemCount: oppProvider.getOpp.length < 10
+                        ? oppProvider.getOpp.length
                         : 10,
                     itemBuilder: (context, index) {
                       return ChangeNotifierProvider.value(
-                          value: productProvider.getOpp[index],
+                          value: oppProvider.getOpp[index],
                           child: const recentlyAddedWidget());
                     }),
               ),
