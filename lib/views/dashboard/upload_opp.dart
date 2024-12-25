@@ -114,15 +114,62 @@ class _UploadOppState extends State<UploadOpp> {
           toastLength: Toast.LENGTH_SHORT,
           textColor: Colors.white,
         );
-        if (!mounted) return;
-        await MyAppMethods.showErrorORWarningDialog(
-          isError: false,
-          context: context,
-          subtitle: "Clear form?",
-          fct: () {
-            clearForm();
-          },
+          clearForm();
+
+
+        ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text('Opportunity uploaded successfully!', style: TextStyle(color: Colors.amber,  fontSize: 16,
+              fontWeight: FontWeight.w500, ),),
+    
+    action: SnackBarAction(
+      label: 'Undo',
+      onPressed: () async {
+        setState(() {
+          _isLoading = true;
+          
+        }
         );
+
+        try {
+          if (oppImageUrl != null) {
+            final storageRef = FirebaseStorage.instance
+                .refFromURL(oppImageUrl!);
+            await storageRef.delete();
+          }
+
+          await FirebaseFirestore.instance
+              .collection("opportunitites")
+              .doc(oppID)
+              .delete();
+
+          clearForm();
+          setState(() {
+            _pickedImage = null;
+            oppNetworkImage = null;
+          });
+
+          Fluttertoast.showToast(
+            msg: "Opportunity upload undone",
+            toastLength: Toast.LENGTH_SHORT,
+            textColor: Colors.white,
+          );
+        } catch (error) {
+          await MyAppMethods.showErrorORWarningDialog(
+            context: context,
+            subtitle: "Error undoing upload: $error",
+            fct: () {},
+          );
+        } finally {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      },
+    ),
+  ),
+);
+       
       } on FirebaseException catch (error) {
         await MyAppMethods.showErrorORWarningDialog(
           context: context,
