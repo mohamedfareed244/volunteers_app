@@ -29,10 +29,11 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => OppProvider()),
-      ],
-      child: StreamProvider<User?>.value(
+        StreamProvider<User?>.value(
         value: AuthService().user,
-        initialData: null,
+        initialData: null,)
+      ],
+    
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
@@ -47,7 +48,6 @@ class MainApp extends StatelessWidget {
             // Add more routes here
           },
         ),
-      ),
     );
   }
 }

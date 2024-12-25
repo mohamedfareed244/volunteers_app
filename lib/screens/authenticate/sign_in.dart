@@ -174,12 +174,12 @@ class _SignInState extends State<SignIn> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => drawerr()));
+                                builder: (context) => drawerr(role: 'user')));
                       } else {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => OrganizationDashboard()));
+                                builder: (context) => drawerr(role: 'organization')));
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(

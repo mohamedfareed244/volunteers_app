@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:volunteers_app/services/AuthService.dart';
+import 'package:volunteers_app/views/WelcomeScreen.dart';
 
 class OrganizationDashboard extends StatelessWidget {
   OrganizationDashboard({super.key});
@@ -11,16 +12,6 @@ class OrganizationDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Organization Panel"),
-        actions: [
-          IconButton(
-              onPressed: () {
-                _auth.signOut();
-              },
-              icon: Icon(Icons.exit_to_app_outlined))
-        ],
-      ),
       // drawer: DrawerWidget(),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),

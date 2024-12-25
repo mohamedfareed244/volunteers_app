@@ -94,9 +94,7 @@ class _OrgprofileState extends State<Orgprofile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Edit Profile"),
-      ),
+      
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(50.0),
@@ -117,6 +115,8 @@ class _OrgprofileState extends State<Orgprofile> {
 
                   return Column(
                     children: [
+                      Text("Edit Profile",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),textAlign: TextAlign.center,),
+                      SizedBox(height: 50,),
                       Stack(
                         children: [
                           SizedBox(

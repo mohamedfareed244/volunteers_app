@@ -111,7 +111,7 @@ class _RegisterState extends State<Register> {
                               setState(() =>
                                   error = 'Registration failed. Try again.');
                             } else {
-                  Navigator.push(context,MaterialPageRoute(builder: (context)=> drawerr()));
+                  Navigator.push(context,MaterialPageRoute(builder: (context)=> drawerr(role: 'user',)));
                               print("User registered: ${result.uid}");
                             }
                           }

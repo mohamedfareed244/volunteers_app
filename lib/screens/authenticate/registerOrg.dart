@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:volunteers_app/screens/Home/home.dart';
 import 'package:volunteers_app/screens/authenticate/sign_in.dart';
 import 'package:volunteers_app/services/AuthService.dart';
+import 'package:volunteers_app/views/Drawer/Drawer.dart';
 import 'package:volunteers_app/views/dashboard/edit_organization.dart';
 
 class RegisterOrg extends StatefulWidget {
@@ -111,7 +112,7 @@ class _RegisterOrgState extends State<RegisterOrg> {
                               setState(() =>
                                   error = 'Registration failed. Try again.');
                             } else {
-                              Navigator.push(context,MaterialPageRoute(builder: (context)=> Orgprofile()));
+                              Navigator.push(context,MaterialPageRoute(builder: (context)=> drawerr(role: 'organization',)));
                               print("User registered: ${result.id}");
                             }
                           }

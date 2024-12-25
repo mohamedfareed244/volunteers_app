@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:volunteers_app/screens/authenticate/register.dart';
-import 'package:volunteers_app/screens/authenticate/registerOrg.dart';
 import 'package:volunteers_app/services/AuthService.dart';
+import 'package:volunteers_app/views/WelcomeScreen.dart';
+import 'package:volunteers_app/views/dashboard/organization_dashboard.dart';
+import 'package:volunteers_app/views/dashboard/edit_organization.dart';
 import 'package:volunteers_app/views/privacy_policy.dart';
 import 'package:volunteers_app/views/send_feedback.dart';
 import 'package:volunteers_app/views/settings.dart';
@@ -13,14 +14,29 @@ import 'my_drawer_header.dart';
 import '../notifications.dart';
 
 class drawerr extends StatefulWidget {
+  final String role; // Receive role from AuthWrapper
+
+  const drawerr({super.key, required this.role});
+
   @override
-  _drawerrState createState() => _drawerrState();
+  _DrawerWidgetState createState() => _DrawerWidgetState();
 }
 
-class _drawerrState extends State<drawerr> {
+class _DrawerWidgetState extends State<drawerr> {
+  var currentPage;
   AuthService _authService = AuthService();
+  @override
+  void initState() {
+    super.initState();
+    // Set the initial page based on the role
+    if (widget.role == "user") {
+      currentPage = DrawerSections.home; // Default to home for users
+    } else if (widget.role == "organization") {
+      currentPage = DrawerSections
+          .organization_dashboard; // Default to dashboard for organizations
+    }
+  }
 
-  var currentPage = DrawerSections.home;
   @override
   Widget build(BuildContext context) {
     var container;
@@ -40,19 +56,27 @@ class _drawerrState extends State<drawerr> {
       container = PrivacyPolicyPage();
     } else if (currentPage == DrawerSections.send_feedback) {
       container = SendFeedbackPage();
+    } else if (currentPage == DrawerSections.organization_dashboard) {
+      container = OrganizationDashboard(); // Organization Dashboard
+    } else if (currentPage == DrawerSections.edit_org_profile) {
+      container = Orgprofile(); // Edit Organization Profile
+    } else if (currentPage == DrawerSections.review_volunteer) {
+      container = Orgprofile(); // Review Volunteer Page
     }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Volunteens",
+        title: widget.role=="user"?Text("Volunteens",
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,
-                color: const Color.fromARGB(255, 0, 0, 0))),
+                color: const Color.fromARGB(255, 0, 0, 0))):Text("Organization Panel"),
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () {
               _authService.signOut();
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> WelcomeScreen()));
             },
           ),
         ],
@@ -60,47 +84,72 @@ class _drawerrState extends State<drawerr> {
       body: container,
       drawer: Drawer(
         child: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: [
-                MyHeaderDrawer(),
-                MyDrawerList(),
-              ],
-            ),
+          child: Column(
+            children: [
+              MyHeaderDrawer(),
+              MyDrawerList(widget.role), // Pass role to MyDrawerList
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget MyDrawerList() {
+  Widget MyDrawerList(String role) {
+    List<Widget> menuItems = [];
+
+    // Role-specific menu items
+    if (role == "user") {
+      menuItems.addAll([
+        menuItem(1, "Home", Icons.dashboard_outlined,
+            currentPage == DrawerSections.home ? true : false),
+        menuItem(2, "Profile", Icons.account_box_outlined,
+            currentPage == DrawerSections.profile ? true : false),
+        menuItem(3, "Events", Icons.event,
+            currentPage == DrawerSections.opportunities ? true : false),
+      ]);
+    } else if (role == "organization") {
+      
+      menuItems.add(
+        menuItem(
+            4,
+            "Dashboard",
+            Icons.dashboard_outlined,
+            currentPage == DrawerSections.organization_dashboard
+                ? true
+                : false),
+      );
+      menuItems.add(
+        menuItem(5, "Manage Opportunities", Icons.manage_accounts,
+            currentPage == DrawerSections.opportunities ? true : false),
+      );
+      menuItems.add(
+        menuItem(6, "Edit Profile", Icons.edit,
+            currentPage == DrawerSections.edit_org_profile ? true : false),
+      );
+      menuItems.add(
+        menuItem(7, "Review Volunteers", Icons.group_outlined,
+            currentPage == DrawerSections.review_volunteer ? true : false),
+      );
+    }
+
+    // Add common menu items at the end
+    menuItems.addAll([
+      Divider(),
+      menuItem(8, "Settings", Icons.settings_outlined,
+          currentPage == DrawerSections.settings ? true : false),
+      menuItem(9, "Notifications", Icons.notifications_outlined,
+          currentPage == DrawerSections.notifications ? true : false),
+      Divider(),
+      menuItem(10, "Privacy Policy", Icons.privacy_tip_outlined,
+          currentPage == DrawerSections.privacy_policy ? true : false),
+      menuItem(11, "Send Feedback", Icons.feedback_outlined,
+          currentPage == DrawerSections.send_feedback ? true : false),
+    ]);
+
     return Container(
-      padding: EdgeInsets.only(
-        top: 15,
-      ),
-      child: Column(
-        // shows the list of menu drawer
-        children: [
-          menuItem(1, "Home", Icons.dashboard_outlined,
-              currentPage == DrawerSections.home ? true : false),
-          menuItem(2, "Profile", Icons.account_box_outlined,
-              currentPage == DrawerSections.profile ? true : false),
-          menuItem(3, "Events", Icons.event,
-              currentPage == DrawerSections.opportunities ? true : false),
-          menuItem(4, "chat", Icons.chat,
-              currentPage == DrawerSections.chat ? true : false),
-          Divider(),
-          menuItem(5, "Settings", Icons.settings_outlined,
-              currentPage == DrawerSections.settings ? true : false),
-          menuItem(6, "Notifications", Icons.notifications_outlined,
-              currentPage == DrawerSections.notifications ? true : false),
-          Divider(),
-          menuItem(7, "Privacy policy", Icons.privacy_tip_outlined,
-              currentPage == DrawerSections.privacy_policy ? true : false),
-          menuItem(8, "Send feedback", Icons.feedback_outlined,
-              currentPage == DrawerSections.send_feedback ? true : false),
-        ],
-      ),
+      padding: EdgeInsets.only(top: 15),
+      child: Column(children: menuItems),
     );
   }
 
@@ -118,14 +167,20 @@ class _drawerrState extends State<drawerr> {
             } else if (id == 3) {
               currentPage = DrawerSections.opportunities;
             } else if (id == 4) {
-              currentPage = DrawerSections.chat;
+              currentPage = DrawerSections.organization_dashboard;
             } else if (id == 5) {
-              currentPage = DrawerSections.settings;
+              currentPage = DrawerSections.opportunities;
             } else if (id == 6) {
-              currentPage = DrawerSections.notifications;
+              currentPage = DrawerSections.edit_org_profile;
             } else if (id == 7) {
-              currentPage = DrawerSections.privacy_policy;
+              currentPage = DrawerSections.review_volunteer;
             } else if (id == 8) {
+              currentPage = DrawerSections.settings;
+            } else if (id == 9) {
+              currentPage = DrawerSections.notifications;
+            } else if (id == 10) {
+              currentPage = DrawerSections.privacy_policy;
+            } else if (id == 11) {
               currentPage = DrawerSections.send_feedback;
             }
           });
@@ -168,4 +223,7 @@ enum DrawerSections {
   notifications,
   privacy_policy,
   send_feedback,
+  organization_dashboard, // Organization Dashboard
+  edit_org_profile, // Edit Organization Profile
+  review_volunteer, // Review Volunteer
 }
