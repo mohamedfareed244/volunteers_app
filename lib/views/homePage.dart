@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +17,31 @@ class homePage extends StatefulWidget {
 }
 
 class _homePageState extends State<homePage> {
+  bool isLoadingOpps = true;
+  Future<void> fetchFCT() async {
+    final oppProvider = Provider.of<OppProvider>(context, listen: false);
+    try {
+      Future.wait({
+        oppProvider.fetchOppss(),
+      });
+    } catch (error) {
+      log(error.toString() as num);
+    } finally {
+      setState(() {
+        isLoadingOpps = false;
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (isLoadingOpps) {
+      fetchFCT();
+    }
+
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

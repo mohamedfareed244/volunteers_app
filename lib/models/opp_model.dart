@@ -14,4 +14,17 @@ class OppModel with ChangeNotifier {
   });
 
   get productCategory => null;
+
+
+
+  factory OppModel.fromFirestore(DocumentSnapshot doc) {
+    Map data = doc.data() as Map<String, dynamic>;
+    return OppModel(
+      OppId: data['oppId'],
+      OppTitle: data['oppTitle'],
+      OppDescription: data['oppDescription'],
+      OppImage: data['oppImage'],
+      createdAt: data['createdAt'],
+    );
+  }
 }
