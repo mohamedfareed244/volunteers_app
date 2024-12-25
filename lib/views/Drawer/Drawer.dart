@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:volunteers_app/screens/authenticate/register.dart';
 import 'package:volunteers_app/screens/authenticate/registerOrg.dart';
+import 'package:volunteers_app/services/AuthService.dart';
 import 'package:volunteers_app/views/privacy_policy.dart';
 import 'package:volunteers_app/views/send_feedback.dart';
 import 'package:volunteers_app/views/settings.dart';
@@ -17,65 +18,7 @@ class drawerr extends StatefulWidget {
 }
 
 class _drawerrState extends State<drawerr> {
- void _showRegistrationDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Center(
-          child: Text(
-            "Register as",
-            textAlign: TextAlign.center,
-          ),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: 10),
-            Text(
-              "Choose your role",
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-        actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // Close the dialog
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Register(),
-                    ),
-                  );
-                },
-                child: Text("User"),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // Close the dialog
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => RegisterOrg(),
-                    ),
-                  );
-                },
-                child: Text("Organization"),
-              ),
-            ],
-          ),
-        ],
-      );
-    },
-  );
-}
-
-
+  AuthService _authService = AuthService();
 
   var currentPage = DrawerSections.home;
   @override
@@ -107,9 +50,9 @@ class _drawerrState extends State<drawerr> {
                 color: const Color.fromARGB(255, 0, 0, 0))),
         actions: [
           IconButton(
-            icon: Icon(Icons.person_add_alt_1_outlined),
+            icon: Icon(Icons.logout),
             onPressed: () {
-              _showRegistrationDialog(context);
+              _authService.signOut();
             },
           ),
         ],
