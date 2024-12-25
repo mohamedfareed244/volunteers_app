@@ -33,91 +33,114 @@ class _opportunitiesPageState extends State<opportunitiesPage> {
   List<OppModel> productListSearch = [];
   @override
   Widget build(BuildContext context) {
-    final productProvider = Provider.of<OppProvider>(context);
+    final oppProvider = Provider.of<OppProvider>(context);
 
     String? passedCategory =
         ModalRoute.of(context)!.settings.arguments as String?;
 
-    final List<OppModel> productList = passedCategory == null
-        ? productProvider.getOpp
-        : productProvider.findByCategory(ctgName: passedCategory);
+    final List<OppModel> oppList = passedCategory == null
+        ? oppProvider.getOpp
+        : oppProvider.findByCategory(ctgName: passedCategory);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-          body: productList.isEmpty
+          body: oppList.isEmpty
               ? const Center(
                   child: TitlesTextWidget(label: "No result found"),
                 )
-              : Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 15.0,
-                      ),
-                      TextField(
-                        controller: searchTextController,
-                        decoration: InputDecoration(
-                          hintText: "Search",
-                          filled: true,
-                          prefixIcon: const Icon(Icons.search),
-                          suffixIcon: GestureDetector(
-                            onTap: () {
-                              // setState(() {
-                              searchTextController.clear();
-                              FocusScope.of(context).unfocus();
-                              // });
+              : StreamBuilder<List<OppModel>>(
+                  stream: oppProvider.fetchOppsStream(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: TitlesTextWidget(
+                          label: snapshot.error.toString(),
+                        ),
+                      );
+                    } else if (snapshot.data == null) {
+                      return const Center(
+                        child: TitlesTextWidget(
+                          label: "No opportunities has been added",
+                        ),
+                      );
+                    }
+
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 15.0,
+                          ),
+                          TextField(
+                            controller: searchTextController,
+                            decoration: InputDecoration(
+                              hintText: "Search",
+                              filled: true,
+                              prefixIcon: const Icon(Icons.search),
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  // setState(() {
+                                  searchTextController.clear();
+                                  FocusScope.of(context).unfocus();
+                                  // });
+                                },
+                                child: const Icon(
+                                  Icons.clear,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                productListSearch = oppProvider.searchQuery(
+                                    searchText: searchTextController.text);
+                              });
                             },
-                            child: const Icon(
-                              Icons.clear,
-                              color: Colors.red,
+                            onSubmitted: (value) {
+                              setState(() {
+                                productListSearch = oppProvider.searchQuery(
+                                    searchText: searchTextController.text);
+                              });
+                            },
+                          ),
+                          const SizedBox(
+                            height: 15.0,
+                          ),
+                          if (searchTextController.text.isNotEmpty &&
+                              productListSearch.isEmpty) ...[
+                            const Center(
+                                child: TitlesTextWidget(
+                              label: "No results found",
+                              fontSize: 40,
+                            ))
+                          ],
+                          Expanded(
+                            child: DynamicHeightGridView(
+                              itemCount: searchTextController.text.isNotEmpty
+                                  ? productListSearch.length
+                                  : oppList.length,
+                              builder: ((context, index) {
+                                return oppWidget(
+                                  productId:
+                                      searchTextController.text.isNotEmpty
+                                          ? productListSearch[index].OppId
+                                          : oppList[index].OppId,
+                                );
+                              }),
+                              crossAxisCount: 2,
                             ),
                           ),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            productListSearch = productProvider.searchQuery(
-                                searchText: searchTextController.text);
-                          });
-                        },
-                        onSubmitted: (value) {
-                          setState(() {
-                            productListSearch = productProvider.searchQuery(
-                                searchText: searchTextController.text);
-                          });
-                        },
+                        ],
                       ),
-                      const SizedBox(
-                        height: 15.0,
-                      ),
-                      if (searchTextController.text.isNotEmpty &&
-                          productListSearch.isEmpty) ...[
-                        const Center(
-                            child: TitlesTextWidget(
-                          label: "No results found",
-                          fontSize: 40,
-                        ))
-                      ],
-                      Expanded(
-                        child: DynamicHeightGridView(
-                          itemCount: searchTextController.text.isNotEmpty
-                              ? productListSearch.length
-                              : productList.length,
-                          builder: ((context, index) {
-                            return oppWidget(
-                              productId: searchTextController.text.isNotEmpty
-                                  ? productListSearch[index].OppId
-                                  : productList[index].OppId,
-                            );
-                          }),
-                          crossAxisCount: 2,
-                        ),
-                      ),
-                    ],
-                  ),
-                )),
+                    );
+                  })),
     );
   }
 }

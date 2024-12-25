@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 import 'package:volunteers_app/models/opp_model.dart';
 
 class OppProvider with ChangeNotifier {
+  final List<OppModel> _opportunities = [];
   List<OppModel> get getOpp {
     return _opportunities;
   }
@@ -36,6 +37,7 @@ class OppProvider with ChangeNotifier {
   Future<List<OppModel>> fetchOppss() async {
     try {
       await oppDB.get().then((oppsSnapshot) {
+        _opportunities.clear();
         for (var element in oppsSnapshot.docs) {
           _opportunities.insert(0, OppModel.fromFirestore(element));
         }
@@ -47,5 +49,18 @@ class OppProvider with ChangeNotifier {
     }
   }
 
-  final List<OppModel> _opportunities = [];
+  Stream<List<OppModel>> fetchOppsStream() {
+    try {
+      return oppDB.snapshots().map((snapshot) {
+        _opportunities.clear();
+
+        for (var element in snapshot.docs) {
+          _opportunities.insert(0, OppModel.fromFirestore(element));
+        }
+        return _opportunities;
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

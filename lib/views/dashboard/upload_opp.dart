@@ -349,7 +349,7 @@ class _UploadOppState extends State<UploadOpp> {
                     ),
                   ),
                 ],
-                if (_pickedImage != null && oppNetworkImage != null) ...[
+                if (_pickedImage != null || oppNetworkImage != null) ...[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
