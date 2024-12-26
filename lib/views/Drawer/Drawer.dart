@@ -3,6 +3,8 @@ import 'package:volunteers_app/services/AuthService.dart';
 import 'package:volunteers_app/views/WelcomeScreen.dart';
 import 'package:volunteers_app/views/dashboard/organization_dashboard.dart';
 import 'package:volunteers_app/views/dashboard/edit_organization.dart';
+import 'package:volunteers_app/views/dashboard/upload_opp.dart';
+import 'package:volunteers_app/views/dashboard/user_mangment.dart';
 import 'package:volunteers_app/views/privacy_policy.dart';
 import 'package:volunteers_app/views/send_feedback.dart';
 import 'package:volunteers_app/views/settings.dart';
@@ -62,21 +64,28 @@ class _DrawerWidgetState extends State<drawerr> {
       container = Orgprofile(); // Edit Organization Profile
     } else if (currentPage == DrawerSections.review_volunteer) {
       container = Orgprofile(); // Review Volunteer Page
+    } else if (currentPage == DrawerSections.post_opportunity) {
+      container = UploadOpp(); // Post Opportunity Page
+    } else if (currentPage == DrawerSections.user_mangament) {
+      container = UserPage();
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: widget.role=="user"?Text("Volunteens",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontStyle: FontStyle.italic,
-                color: const Color.fromARGB(255, 0, 0, 0))):Text("Organization Panel"),
+        title: widget.role == "user"
+            ? Text("Volunteens",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                    color: const Color.fromARGB(255, 0, 0, 0)))
+            : Text("Organization Panel"),
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () {
               _authService.signOut();
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> WelcomeScreen()));
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => WelcomeScreen()));
             },
           ),
         ],
@@ -107,9 +116,13 @@ class _DrawerWidgetState extends State<drawerr> {
             currentPage == DrawerSections.profile ? true : false),
         menuItem(3, "Events", Icons.event,
             currentPage == DrawerSections.opportunities ? true : false),
+        Divider(),
+        menuItem(8, "Settings", Icons.settings_outlined,
+            currentPage == DrawerSections.settings ? true : false),
+        menuItem(9, "Notifications", Icons.notifications_outlined,
+            currentPage == DrawerSections.notifications ? true : false),
       ]);
     } else if (role == "organization") {
-      
       menuItems.add(
         menuItem(
             4,
@@ -131,15 +144,16 @@ class _DrawerWidgetState extends State<drawerr> {
         menuItem(7, "Review Volunteers", Icons.group_outlined,
             currentPage == DrawerSections.review_volunteer ? true : false),
       );
+      menuItems.add(
+        menuItem(12, "Post Opportunity", Icons.post_add,
+            currentPage == DrawerSections.post_opportunity ? true : false),
+      );
+      menuItems.add(menuItem(13, "User Management", Icons.manage_accounts,
+          currentPage == DrawerSections.user_mangament ? true : false));
     }
 
     // Add common menu items at the end
     menuItems.addAll([
-      Divider(),
-      menuItem(8, "Settings", Icons.settings_outlined,
-          currentPage == DrawerSections.settings ? true : false),
-      menuItem(9, "Notifications", Icons.notifications_outlined,
-          currentPage == DrawerSections.notifications ? true : false),
       Divider(),
       menuItem(10, "Privacy Policy", Icons.privacy_tip_outlined,
           currentPage == DrawerSections.privacy_policy ? true : false),
@@ -182,6 +196,10 @@ class _DrawerWidgetState extends State<drawerr> {
               currentPage = DrawerSections.privacy_policy;
             } else if (id == 11) {
               currentPage = DrawerSections.send_feedback;
+            } else if (id == 12) {
+              currentPage = DrawerSections.post_opportunity;
+            } else if (id == 13) {
+              currentPage = DrawerSections.user_mangament;
             }
           });
         },
@@ -226,4 +244,6 @@ enum DrawerSections {
   organization_dashboard, // Organization Dashboard
   edit_org_profile, // Edit Organization Profile
   review_volunteer, // Review Volunteer
+  post_opportunity, // post opportunity
+  user_mangament
 }
