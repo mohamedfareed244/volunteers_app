@@ -144,18 +144,18 @@ class _OppDetailsState extends State<OppDetails> {
                     ],
                   ),
                 ),
-                Positioned(
-                  right: 16,
-                  bottom: 16,
-                  child: FloatingActionButton.extended(
-                    onPressed: () {
-                      // Add your chat functionality here
-                    },
-                    backgroundColor: Colors.blue,
-                    icon: const Icon(Icons.chat),
-                    label: const Text("Chat"),
-                  ),
-                ),
+                // Positioned(
+                //   right: 16,
+                //   bottom: 16,
+                //   child: FloatingActionButton.extended(
+                //     onPressed: () {
+                //       // Add your chat functionality here
+                //     },
+                //     backgroundColor: Colors.blue,
+                //     icon: const Icon(Icons.chat),
+                //     label: const Text("Chat"),
+                //   ),
+                // ),
               ],
             ),
     );
