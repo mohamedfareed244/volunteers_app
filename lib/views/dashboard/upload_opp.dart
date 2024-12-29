@@ -287,12 +287,7 @@ class _UploadOppState extends State<UploadOpp> {
             ),
           ),
         ),
-        appBar: AppBar(
-          centerTitle: true,
-          title: const TitlesTextWidget(
-            label: "Upload a new Opportunity",
-          ),
-        ),
+        
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(

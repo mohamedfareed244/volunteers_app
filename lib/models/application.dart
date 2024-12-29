@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 
 class Application {
+  final String appId; // ID of the application
   final String userId; // ID of the user applying
   final String opportunityId; // ID of the opportunity
   final String? userEmail; // Email of the user (optional)
   final String? opportunityTitle; // Title of the opportunity (optional)
-  final String status; // Status of the application, e.g., "pending"
+  String status; // Status of the application, e.g., "pending"
   final DateTime applicationDate; // Timestamp for when the application was submitted
   final String relevantSkills; // Relevant skills provided by the user
   final String interestReason; // Why the user is interested in the opportunity
@@ -19,11 +21,13 @@ class Application {
     required this.applicationDate,
     required this.relevantSkills,
     required this.interestReason,
-  });
+     String? appId, 
+  }):appId= appId ?? const Uuid().v4();
 
   // Convert Application object to a map for Firestore
   toJson() {
     return {
+      'appId': appId,
       'userId': userId,
       'opportunityId': opportunityId,
       'userEmail': userEmail,
@@ -38,6 +42,7 @@ class Application {
   // Create Application object from Firestore document snapshot
   factory Application.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> DcoumentSnapshot) {
     return Application(
+      appId: DcoumentSnapshot.id,
       userId: DcoumentSnapshot.data()!['userId'] ,
       opportunityId: DcoumentSnapshot.data()!['opportunityId'] ,
       userEmail: DcoumentSnapshot.data()!['userEmail'] ,
