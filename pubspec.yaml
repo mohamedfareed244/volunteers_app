@@ -56,5 +56,6 @@ flutter:
     - assets/images/courses-1.jpg
     - assets/images/courses-2.jpg
     - assets/images/courses-3.jpg
+    - assets/sounds/alert.wav
 
 
