@@ -10,8 +10,7 @@ class AuthWrapper extends StatelessWidget {
   const AuthWrapper({super.key});
 
   Future<String?> _getUserRole(String userId) async {
-    final userDoc =
-        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    final userDoc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
     if (userDoc.exists) {
       return 'user';
     }
@@ -35,7 +34,7 @@ class AuthWrapper extends StatelessWidget {
     }
 
     return FutureBuilder<String?>(
-      future: _getUserRole(user.uid),
+      future: getUserRole(user.uid),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
