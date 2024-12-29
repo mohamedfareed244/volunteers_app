@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:volunteers_app/models/opp_model.dart';
 import 'package:volunteers_app/providers/opp_provider.dart';
+import 'package:volunteers_app/views/inner_screens/application_form.dart';
 import 'package:volunteers_app/views/widgets/subtitle_text.dart';
 import 'package:volunteers_app/views/widgets/title_text.dart';
 import 'package:volunteers_app/views/widgets/heart_btn.dart';
@@ -102,7 +103,13 @@ class _OppDetailsState extends State<OppDetails> {
                                             ),
                                           ),
                                         ),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            ApplicationForm.routName,
+                                            arguments: oppId,
+                                          );
+                                        },
                                         icon: const Icon(
                                             Icons.volunteer_activism),
                                         label: const Text(
