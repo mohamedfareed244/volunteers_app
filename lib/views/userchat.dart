@@ -21,6 +21,7 @@ class ChatScreen extends StatelessWidget {
 
   String currentid;
   String? currenttype;
+  bool makesound=false;
 
 
 
@@ -29,6 +30,7 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  
   return Scaffold(
     appBar: AppBar(
       backgroundColor: Colors.amber,
@@ -48,9 +50,9 @@ class ChatScreen extends StatelessWidget {
             stream: getChatMessages(context,currentid,currenttype),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.active &&
-              snapshot.hasData) {
-            
-               _playSound(); // Play sound on every stream update
+              snapshot.hasData && makesound ) {
+              
+               _playSound(); 
           }
             // Check the connection state
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -60,7 +62,7 @@ class ChatScreen extends StatelessWidget {
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Center(child: Text('No users found.'));
             } else {
-    
+              makesound=true;
               return ListView(
                 controller: scrollController,
                 padding: const EdgeInsets.all(16.0),
@@ -101,6 +103,7 @@ class ChatScreen extends StatelessWidget {
             icon:  Icon(Icons.send,color: Colors.blue[400],),
             onPressed: () async {
               if(controller.text.trim().isNotEmpty){
+                makesound=false;
               await sendMessage(controller.text, currentid,currenttype);
                scrollController.animateTo(
         scrollController.position.maxScrollExtent,
