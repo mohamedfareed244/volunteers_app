@@ -47,7 +47,7 @@ class _DrawerWidgetState extends State<drawerr> {
     if (currentPage == DrawerSections.home) {
       container = homePage();
     } else if (currentPage == DrawerSections.profile) {
-      container = profilePage();
+      container = Userprofile();
     } else if (currentPage == DrawerSections.opportunities) {
       container = opportunitiesPage();
     } else if (currentPage == DrawerSections.chat) {
