@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:volunteers_app/providers/opp_provider.dart';
 import 'package:volunteers_app/services/AuthService.dart';
 import 'package:volunteers_app/views/dashboard/upload_opp.dart';
+import 'package:volunteers_app/views/inner_screens/application_form.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteers_app/views/Drawer/Drawer.dart';
@@ -45,6 +46,7 @@ class MainApp extends StatelessWidget {
           routes: {
             OppDetails.routName: (context) => const OppDetails(),
             UploadOpp.routeName: (context) => const UploadOpp(),
+             ApplicationForm.routName: (context) => const ApplicationForm(),
             // Add more routes here
           },
         ),
