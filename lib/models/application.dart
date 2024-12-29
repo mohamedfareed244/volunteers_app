@@ -43,7 +43,7 @@ class Application {
       userEmail: DcoumentSnapshot.data()!['userEmail'] ,
       opportunityTitle: DcoumentSnapshot.data()!['opportunityTitle'] ,
       status: DcoumentSnapshot.data()!['status'] ,
-      applicationDate: DateTime.parse(DcoumentSnapshot.data()!['applicationDate'] ),
+      applicationDate: (DcoumentSnapshot.data()!['applicationDate'] as Timestamp).toDate(),
       relevantSkills: DcoumentSnapshot.data()!['relevantSkills'],
       interestReason: DcoumentSnapshot.data()!['interestReason'] ,
     );
