@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:volunteers_app/views/userchat.dart';
 
 
+
 //building entire chat messages 
 Widget buildMessage(BuildContext context, String message, bool isMe) {
     return Align(
@@ -28,21 +29,23 @@ Widget buildMessage(BuildContext context, String message, bool isMe) {
   }
 
 
-Stream<List<Widget>> getChatMessages(BuildContext context, String id) {
+Stream<List<Widget>> getChatMessages(BuildContext context, String id,String? type) {
   // Get Firestore connection
   FirebaseFirestore connection = FirebaseFirestore.instance;
   CollectionReference collectionRef =
       connection.collection('chats').doc(id).collection('messages');
 
+
   // Stream the data and build widgets dynamically
   return collectionRef.orderBy('date',descending: false).snapshots().map((querysnapshot) {
     // Create a **new list** for every snapshot to avoid duplicates
     List<Widget> chatList = [];
+    
 
     for (var doc in querysnapshot.docs) {
       var data = doc.data() as Map<String, dynamic>;
       // Build a new message widget for each document
-      chatList.add(buildMessage(context, data['text'], data['fromuser']));
+      chatList.add(buildMessage(context, data['text'], MsgLoc(data['fromuser'],type)));
     }
 
     // Return the new list
@@ -50,7 +53,9 @@ Stream<List<Widget>> getChatMessages(BuildContext context, String id) {
   });
 }
 
-Future<void> sendMessage(String message,String chatid,usertypes usertype) async{
+
+
+Future<void> sendMessage(String message,String chatid,String? type) async{
   //get the required collection
   FirebaseFirestore connection = FirebaseFirestore.instance;
   CollectionReference collectionRef =connection.collection('chats').doc(chatid).collection('messages');
@@ -61,8 +66,25 @@ Future<void> sendMessage(String message,String chatid,usertypes usertype) async{
 await collectionRef.add({
   'text':message,
   'date':now,
-  'fromuser':usertype==usertypes.User?true:false,
+  'fromuser':type=="user"?true:false,
 }
 );
 
+}
+
+bool MsgLoc(bool fromuser,String? type){
+  if(type=="user"){
+    if(fromuser){
+      return true;
+    }
+return false;
+  }else{
+    if(!fromuser){
+      return true;
+    }
+    return false;
+
+  }
+
+  
 }

@@ -1,16 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:volunteers_app/screens/AuthWrapper.dart';
 import 'package:volunteers_app/views/userchat.dart';
 import 'package:intl/intl.dart';
 
 // Builds a single chat item widget
-Widget buildChatItem(BuildContext context, String name,String date, Color backgroundColor,String chatid) {
+Future<Widget> buildChatItem(BuildContext context, String name,String date, Color backgroundColor,String chatid) async {
+  String? role=await getUserRole(FirebaseAuth.instance.currentUser!.uid);
+
   return InkWell(
   onTap: () {
      Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ChatScreen(chatid))
+              MaterialPageRoute(builder: (context) => ChatScreen(chatid,role))
               );
   },
   child: Container(
@@ -155,7 +158,7 @@ Future<List<Widget>> processChatData(QuerySnapshot querySnapshot,
     print("the current user role is : ${userRole}");
     String userName =  userRole == 'organization' ? user['Name'] : user['firstName'] ;
     // Build chat item
-    usersList.add(buildChatItem(
+    usersList.add(await buildChatItem(
       context,
       userName, 
       formattedDate,

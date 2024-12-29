@@ -14,16 +14,14 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-enum usertypes{
-Organization,
-User
-}
+
 class ChatScreen extends StatelessWidget {
   
-  ChatScreen([this.currentid="unkown",this.currtype=usertypes.User]);
+  ChatScreen([this.currentid="unkown",this.currenttype="user"]);
 
   String currentid;
-  usertypes currtype;
+  String? currenttype;
+
 
 
   TextEditingController controller=TextEditingController();
@@ -47,7 +45,7 @@ class ChatScreen extends StatelessWidget {
         Expanded(
        
           child: StreamBuilder<List<Widget>>(
-            stream: getChatMessages(context,currentid),
+            stream: getChatMessages(context,currentid,currenttype),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.active &&
               snapshot.hasData) {
@@ -103,7 +101,7 @@ class ChatScreen extends StatelessWidget {
             icon:  Icon(Icons.send,color: Colors.blue[400],),
             onPressed: () async {
               if(controller.text.trim().isNotEmpty){
-              await sendMessage(controller.text, currentid,currtype);
+              await sendMessage(controller.text, currentid,currenttype);
                scrollController.animateTo(
         scrollController.position.maxScrollExtent,
         duration: const Duration(milliseconds: 300),
