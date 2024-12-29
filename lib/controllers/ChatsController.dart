@@ -62,6 +62,8 @@ Stream<List<Widget>> getOrganizationUsers(
 //fetch the current organizations for the logged in user 
 Stream<List<Widget>> getUsersOrganizations(
     String userid, BuildContext context) async* {
+      
+       try{
   FirebaseFirestore connection = FirebaseFirestore.instance;
   CollectionReference collectionRef = connection.collection('chats');
 
@@ -75,48 +77,67 @@ Stream<List<Widget>> getUsersOrganizations(
         List<Map<String,dynamic>> users=await FetchUserOrganizations(querySnapshot);
         return processChatData(querySnapshot, context, users);// proccess the data 
       }//end map functio 
-      ); //end map 
+      );
+       }catch(e){
+         print('\x1B[31mError Happened : ${e.toString()}\x1B[0m');
+       }
+ //end map 
 }
-
-Future<List<Map<String,dynamic>>> FetchUserOrganizations(QuerySnapshot snapshot) async{
+Future<List<Map<String, dynamic>>> FetchUserOrganizations(QuerySnapshot snapshot) async {
   FirebaseFirestore connection = FirebaseFirestore.instance;
   CollectionReference collectionRef = connection.collection('Organization');
 
-  //create the users list 
-  List<Map<String,dynamic>> orglist=[];
+  // Create the users list
+  List<Map<String, dynamic>> orglist = [];
 
-  //iterate over the current snapshot 
-  for (var docs in snapshot.docs){
-    DocumentSnapshot user = await collectionRef.doc((docs.data()as Map<String, dynamic>)['orgid']).get();
-  
-orglist.add(user.data() as Map<String, dynamic>);
+  // Iterate over the current snapshot
+  for (var docs in snapshot.docs) {
+    // Fetch the document
+    DocumentSnapshot user = await collectionRef.doc((docs.data() as Map<String, dynamic>)['orgid']).get();
+    
+    // Add the document data along with the document ID
+    Map<String, dynamic> userData = user.data() as Map<String, dynamic>;
+    userData['id'] = user.id; // Add document ID
+
+    // Add to the list
+    orglist.add(userData);
   }
-  return orglist;
 
+  return orglist;
 }
 
 
-Future<List<Map<String,dynamic>>> FetchUsers(QuerySnapshot snapshot) async{
+
+Future<List<Map<String, dynamic>>> FetchUsers(QuerySnapshot snapshot) async {
   FirebaseFirestore connection = FirebaseFirestore.instance;
   CollectionReference collectionRef = connection.collection('users');
 
-  //create the users list 
-  List<Map<String,dynamic>> userlist=[];
+  // Create the users list
+  List<Map<String, dynamic>> userlist = [];
 
-  //iterate over the current snapshot 
-  for (var docs in snapshot.docs){
-    DocumentSnapshot user = await collectionRef.doc((docs.data()as Map<String, dynamic>)['userid']).get();
-  
-userlist.add(user.data() as Map<String, dynamic>);
+  // Iterate over the current snapshot
+  for (var docs in snapshot.docs) {
+    // Fetch the user document
+    DocumentSnapshot user = await collectionRef.doc(
+        (docs.data() as Map<String, dynamic>)['userid']).get();
+
+    // Add document data along with its ID
+    Map<String, dynamic> userData = user.data() as Map<String, dynamic>;
+    userData['id'] = user.id; // Add the document ID
+
+    // Add to the user list
+    userlist.add(userData);
   }
-  return userlist;
 
+  return userlist;
 }
+
 
 // Process the chat data synchronously
 Future<List<Widget>> processChatData(QuerySnapshot querySnapshot,
     BuildContext context, List<Map<String,dynamic>> users) async{
-  List<Widget> usersList = [];
+        List<Widget> usersList = [];
+     try{
   for (var i=0;i<querySnapshot.docs.length;i++) {
 
     var data = querySnapshot.docs[i].data() as Map<String, dynamic>;
@@ -128,7 +149,11 @@ Future<List<Widget>> processChatData(QuerySnapshot querySnapshot,
     formattedDate+=" at $formattedTime";
 
     // Use pre-fetched user data as needed
-    String userName =  await getUserRole(user['uid']) == 'organization' ? user['Name'] : user['firstName'] ;
+
+    String? userRole=await getUserRole(user['id']);
+  
+    print("the current user role is : ${userRole}");
+    String userName =  userRole == 'organization' ? user['Name'] : user['firstName'] ;
     // Build chat item
     usersList.add(buildChatItem(
       context,
@@ -138,6 +163,13 @@ Future<List<Widget>> processChatData(QuerySnapshot querySnapshot,
       querySnapshot.docs[i].id
     ));
   }
+     }catch(e,stack){
+      print("error in process chat data function ${stack}");
+     }
+
+
+
+
   return usersList;
 }
 
@@ -148,6 +180,7 @@ String formatTimestamp(Timestamp timestamp) {
 }
 
    Future<String?> getUserRole(String userId) async {
+    print("finding the one with id : ${userId}");
     final userDoc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
     if (userDoc.exists) {
       return 'user';
