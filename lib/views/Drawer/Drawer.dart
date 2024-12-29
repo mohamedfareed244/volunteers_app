@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:volunteers_app/services/AuthService.dart';
 import 'package:volunteers_app/views/WelcomeScreen.dart';
+import 'package:volunteers_app/views/currentchats.dart';
 import 'package:volunteers_app/views/dashboard/organization_dashboard.dart';
 import 'package:volunteers_app/views/dashboard/edit_organization.dart';
 import 'package:volunteers_app/views/dashboard/upload_opp.dart';
@@ -49,7 +50,7 @@ class _DrawerWidgetState extends State<drawerr> {
     } else if (currentPage == DrawerSections.opportunities) {
       container = opportunitiesPage();
     } else if (currentPage == DrawerSections.chat) {
-      container = chatPage();
+      container = ChatsScreen();
     } else if (currentPage == DrawerSections.settings) {
       container = SettingsPage();
     } else if (currentPage == DrawerSections.notifications) {
@@ -116,6 +117,7 @@ class _DrawerWidgetState extends State<drawerr> {
             currentPage == DrawerSections.profile ? true : false),
         menuItem(3, "Events", Icons.event,
             currentPage == DrawerSections.opportunities ? true : false),
+           
         Divider(),
         menuItem(8, "Settings", Icons.settings_outlined,
             currentPage == DrawerSections.settings ? true : false),
@@ -154,6 +156,8 @@ class _DrawerWidgetState extends State<drawerr> {
 
     // Add common menu items at the end
     menuItems.addAll([
+        menuItem(14, "Chats", Icons.message,
+            currentPage == DrawerSections.chat ? true : false),
       Divider(),
       menuItem(10, "Privacy Policy", Icons.privacy_tip_outlined,
           currentPage == DrawerSections.privacy_policy ? true : false),
@@ -200,6 +204,8 @@ class _DrawerWidgetState extends State<drawerr> {
               currentPage = DrawerSections.post_opportunity;
             } else if (id == 13) {
               currentPage = DrawerSections.user_mangament;
+            }else if(id == 14){
+              currentPage = DrawerSections.chat;
             }
           });
         },

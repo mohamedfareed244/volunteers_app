@@ -27,6 +27,8 @@ dependencies:
   fluttertoast: ^8.2.10
   firebase_storage: ^12.3.7
   google_fonts: ^6.2.1
+  audioplayers: ^6.1.0
+  intl: ^0.20.1
 
 
 dev_dependencies:
