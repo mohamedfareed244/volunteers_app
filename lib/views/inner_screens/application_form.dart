@@ -18,9 +18,9 @@ class _ApplicationFormState extends State<ApplicationForm> {
   String? opportunityTitle;
   Future<void> saveApplication(Application application) async {
     try {
-      await FirebaseFirestore.instance.collection("applications").add(
-            application.toJson(),
-          );
+      await FirebaseFirestore.instance.collection("applications").doc(application.appId).set(
+        application.toJson()
+      );
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
