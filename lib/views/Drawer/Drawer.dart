@@ -135,10 +135,10 @@ class _DrawerWidgetState extends State<drawerr> {
                 ? true
                 : false),
       );
-      menuItems.add(
-        menuItem(5, "Manage Opportunities", Icons.manage_accounts,
-            currentPage == DrawerSections.opportunities ? true : false),
-      );
+      // menuItems.add(
+      //   menuItem(5, "Manage Opportunities", Icons.manage_accounts,
+      //       currentPage == DrawerSections.opportunities ? true : false),
+      // );
       menuItems.add(
         menuItem(6, "Edit Profile", Icons.edit,
             currentPage == DrawerSections.edit_org_profile ? true : false),
@@ -187,8 +187,8 @@ class _DrawerWidgetState extends State<drawerr> {
               currentPage = DrawerSections.opportunities;
             } else if (id == 4) {
               currentPage = DrawerSections.organization_dashboard;
-            } else if (id == 5) {
-              currentPage = DrawerSections.opportunities;
+            // } else if (id == 5) {
+            //   currentPage = DrawerSections.opportunities;
             } else if (id == 6) {
               currentPage = DrawerSections.edit_org_profile;
             } else if (id == 7) {

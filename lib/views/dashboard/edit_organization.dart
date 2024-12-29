@@ -69,6 +69,12 @@ class _OrgprofileState extends State<Orgprofile> {
 
   Future<void> saveChanges(Organization org) async {
     await _db.doc(org.id).update(org.toJson());
+     ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.green,
+          content: Text("Successfully Updated"),
+        ),
+      );
   }
 
   //Delete Account Function
