@@ -4,6 +4,7 @@ import 'package:volunteers_app/views/WelcomeScreen.dart';
 import 'package:volunteers_app/views/currentchats.dart';
 import 'package:volunteers_app/views/dashboard/organization_dashboard.dart';
 import 'package:volunteers_app/views/dashboard/edit_organization.dart';
+import 'package:volunteers_app/views/dashboard/review_applications.dart';
 import 'package:volunteers_app/views/dashboard/upload_opp.dart';
 import 'package:volunteers_app/views/dashboard/user_mangment.dart';
 import 'package:volunteers_app/views/privacy_policy.dart';
@@ -64,7 +65,7 @@ class _DrawerWidgetState extends State<drawerr> {
     } else if (currentPage == DrawerSections.edit_org_profile) {
       container = Orgprofile(); // Edit Organization Profile
     } else if (currentPage == DrawerSections.review_volunteer) {
-      container = Orgprofile(); // Review Volunteer Page
+      container = ReviewApplications(); // Review Volunteer Page
     } else if (currentPage == DrawerSections.post_opportunity) {
       container = UploadOpp(); // Post Opportunity Page
     } else if (currentPage == DrawerSections.user_mangament) {
