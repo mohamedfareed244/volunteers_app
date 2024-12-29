@@ -9,7 +9,7 @@ import 'package:volunteers_app/views/dashboard/organization_dashboard.dart';
 class AuthWrapper extends StatelessWidget {
   const AuthWrapper({super.key});
 
-  Future<String?> _getUserRole(String userId) async {
+  static Future<String?> getUserRole(String userId) async {
     final userDoc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
     if (userDoc.exists) {
       return 'user';
