@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:volunteers_app/controllers/my_app_method.dart';
 import 'package:volunteers_app/models/opp_model.dart';
-import 'package:volunteers_app/views/services/my_validators.dart';
+import 'package:volunteers_app/services/my_validators.dart';
 
 import 'dart:io';
 

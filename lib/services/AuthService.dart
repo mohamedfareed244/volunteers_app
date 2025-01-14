@@ -11,17 +11,28 @@ class AuthService {
   }
 
   // Sign in with email and password
-  Future<User?> signInWithEmailAndPassword(
-      String email, String password) async {
-    try {
-      UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
-      return result.user;
-    } catch (e) {
-      print('Sign in error: $e');
+Future<User?> signInWithEmailAndPassword(String email, String password) async {
+  try {
+    UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    User? user = result.user;
+
+    if (user != null && user.emailVerified) {
+      return user;
+    } else if (user != null && !user.emailVerified) {
+      print('Email not verified. Please verify your email.');
+      return null;
+    } else {
       return null;
     }
+  } catch (e) {
+    print('Sign in error: $e');
+    return null;
   }
+}
+
 
   // Register with email and password
   Future<UserModel?> registerWithEmailAndPassword(
@@ -41,6 +52,8 @@ class AuthService {
       User? user = result.user;
 
       if (user != null) {
+        //ab3t email verification
+        await user.sendEmailVerification();
         // Create a UserModel instance with all user attributes
         UserModel newUser = UserModel(
           uid: user.uid,

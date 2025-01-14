@@ -7,8 +7,8 @@ import 'package:volunteers_app/providers/opp_provider.dart';
 import 'package:volunteers_app/views/widgets/subtitle_text.dart';
 import 'package:volunteers_app/views/widgets/title_text.dart';
 import 'package:volunteers_app/views/widgets/recentlyAddedWidget.dart';
-import 'package:volunteers_app/views/services/assets_manager.dart';
-import 'package:volunteers_app/views/services/app_constants.dart';
+import 'package:volunteers_app/services/assets_manager.dart';
+import 'package:volunteers_app/services/app_constants.dart';
 import 'package:volunteers_app/views/widgets/ctg_rounded_widget.dart';
 
 class homePage extends StatefulWidget {

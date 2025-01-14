@@ -1,6 +1,6 @@
 import 'package:volunteers_app/models/categories_model.dart';
 
-import '../services/assets_manager.dart';
+import 'assets_manager.dart';
 
 class AppConstants {
   static const String productImageUrl =

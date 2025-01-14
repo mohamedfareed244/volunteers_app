@@ -111,8 +111,26 @@ class _RegisterState extends State<Register> {
                               setState(() =>
                                   error = 'Registration failed. Try again.');
                             } else {
-                  Navigator.push(context,MaterialPageRoute(builder: (context)=> drawerr(role: 'user',)));
-                              print("User registered: ${result.uid}");
+                                 // Show verification dialog after successful registration
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text('Email Verification'),
+                                  content: Text(
+                                      'A verification link has been sent to your email. Please verify your email before signing in.'),
+                                  actions: [
+                                    TextButton(
+                                      child: Text('OK'),
+                                      onPressed: () {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => SignIn()));
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
                             }
                           }
                         },

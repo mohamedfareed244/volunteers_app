@@ -4,7 +4,7 @@ import 'package:dynamic_height_grid_view/dynamic_height_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:volunteers_app/models/opp_model.dart';
 import 'package:volunteers_app/providers/opp_provider.dart';
-import 'package:volunteers_app/views/services/assets_manager.dart';
+import 'package:volunteers_app/services/assets_manager.dart';
 import 'package:volunteers_app/views/widgets/title_text.dart';
 import 'package:volunteers_app/views/widgets/oppWidget.dart';
 
