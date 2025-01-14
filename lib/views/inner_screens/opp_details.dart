@@ -125,9 +125,9 @@ class _OppDetailsState extends State<OppDetails> {
                             const SizedBox(
                               height: 25,
                             ),
-                            Row(
+                            const Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
+                              children:  [
                                 TitlesTextWidget(
                                     label: "About this Opportunity"),
                               ],
