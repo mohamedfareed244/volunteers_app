@@ -14,7 +14,7 @@ class MyHeaderDrawer extends StatefulWidget {
 class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
   String name = "Loading...";
   String email = "Loading...";
-  String imageUrl = "assets/images/profile.jpg"; // Default local placeholder
+  String imageUrl = "assets/images/image1.png"; // Default local placeholder
 
   @override
   void initState() {
@@ -36,10 +36,9 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
 
         if (snapshot.exists) {
           setState(() {
-            name = widget.role=="user"?snapshot["firstName"] ?? "No Name":snapshot["Name"] ?? "No Name"; // Replace with Firestore field name
-            email = widget.role=="user"?snapshot["email"] ?? "No Email":snapshot["Email"] ?? "No Email"; // Replace with Firestore field name
-            imageUrl = snapshot["imageUrl"] ??
-                "assets/images/image1.png"; // Replace with Firestore field name
+            name = widget.role=="user"?snapshot["firstName"] ?? "No Name":snapshot["Name"] ?? "No Name"; 
+            email = widget.role=="user"?snapshot["email"] ?? "No Email":snapshot["Email"] ?? "No Email"; 
+            imageUrl = snapshot["imageUrl"]??imageUrl; // Replace with Firestore field name
           });
         }
       }
