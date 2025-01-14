@@ -7,6 +7,7 @@ class UserModel {
   final String email;
   final String address;
   final String role ;
+   String? imageUrl;
   final DateTime? createdAt;
 
   UserModel({
@@ -17,6 +18,7 @@ class UserModel {
     required this.address,
     required this.role,
     this.createdAt,
+    this.imageUrl,
   });
 
   // Convert UserModel to Firestore map
@@ -28,6 +30,7 @@ class UserModel {
       'email': email,
       'address': address,
       'role': role,
+      'imageUrl': imageUrl,
       'createdAt': createdAt,
     };
   }
@@ -42,6 +45,7 @@ class UserModel {
       address: map.data()!['address'],
       role: map.data()!['role'],
       createdAt: (map.data()!['createdAt'] as Timestamp?)?.toDate(),
+       imageUrl: map.data()!['imageUrl'],
     );
   }
 }

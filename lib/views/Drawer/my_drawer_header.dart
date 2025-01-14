@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MyHeaderDrawer extends StatefulWidget {
+  final String role;
+  const MyHeaderDrawer({super.key, required this.role});
   @override
   _MyHeaderDrawerState createState() => _MyHeaderDrawerState();
 }
