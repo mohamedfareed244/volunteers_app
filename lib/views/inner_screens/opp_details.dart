@@ -87,6 +87,7 @@ class _OppDetailsState extends State<OppDetails> {
                                     MainAxisAlignment.spaceAround,
                                 children: [
                                   HeartButtonWidget(
+                                     productId: getCurrOpp.OppId,
                                     color: Colors.amber.shade300,
                                   ),
                                   const SizedBox(

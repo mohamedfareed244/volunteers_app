@@ -6,9 +6,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:volunteers_app/controllers/Notifications.dart';
 import 'package:volunteers_app/providers/opp_provider.dart';
+import 'package:volunteers_app/providers/wishlist_provider.dart';
 import 'package:volunteers_app/services/AuthService.dart';
 import 'package:volunteers_app/views/dashboard/upload_opp.dart';
 import 'package:volunteers_app/views/inner_screens/application_form.dart';
+import 'package:volunteers_app/views/inner_screens/wishlist.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteers_app/views/Drawer/Drawer.dart';
@@ -34,6 +36,9 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => OppProvider()),
+         ChangeNotifierProvider(
+          create: (_) => WishlistProvider(),
+        ),
         StreamProvider<User?>.value(
         value: AuthService().user,
         initialData: null,)
@@ -46,10 +51,11 @@ class MainApp extends StatelessWidget {
               appBarTheme: AppBarTheme(
                 backgroundColor: Colors.amber[700],
               )),
-          home: const AuthWrapper(),
+          home:  const AuthWrapper(),
           routes: {
             OppDetails.routName: (context) => const OppDetails(),
             UploadOpp.routeName: (context) => const UploadOpp(),
+            WishlistScreen.routName: (context) => const WishlistScreen(),
              ApplicationForm.routName: (context) => const ApplicationForm(),
             // Add more routes here
           },

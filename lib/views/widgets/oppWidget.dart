@@ -64,12 +64,13 @@ class _oppWidgetState extends State<oppWidget> {
                           fontSize: 18,
                         ),
                       ),
-                      const Flexible(
+                      Flexible(
                         flex: 2,
                         child: Align(
                           alignment: Alignment
                               .center, // Center the HeartButtonWidget horizontally
-                          child: HeartButtonWidget(),
+                          child: HeartButtonWidget(
+                            productId: getCurrProduct.OppId),
                         ),
                       ),
                     ],
