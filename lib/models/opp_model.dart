@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class OppModel with ChangeNotifier {
-  final String OppId, OppTitle, OppDescription, OppImage;
+  final String OppId, OppTitle, OppDescription, OppImage,Orgid;
   Timestamp? createdAt;
 
   OppModel({
@@ -11,6 +11,7 @@ class OppModel with ChangeNotifier {
     required this.OppDescription,
     required this.OppImage,
     this.createdAt,
+    required this.Orgid
   });
 
   get productCategory => null;
@@ -25,6 +26,7 @@ class OppModel with ChangeNotifier {
       OppDescription: data['oppDescription'],
       OppImage: data['oppImage'],
       createdAt: data['createdAt'],
+      Orgid: data["orgid"]
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -108,6 +109,7 @@ class _UploadOppState extends State<UploadOpp> {
           'oppImage': oppImageUrl,
           'oppDescription': _descriptionController.text,
           'createdAt': Timestamp.now(),
+          'orgid':FirebaseAuth.instance.currentUser!.uid,
         });
         Fluttertoast.showToast(
           msg: "Opportunity has been added",
