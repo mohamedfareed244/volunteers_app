@@ -199,3 +199,32 @@ String formatTimestamp(Timestamp timestamp) {
   }
 
 
+//function to start new chat
+Future<void> StartNewChat (String orgid,BuildContext context) async{
+  //fetch the current user id 
+  String currentUserId= await FirebaseAuth.instance.currentUser!.uid;
+  //get the current date for last update
+  Timestamp currentDate=Timestamp.now();
+  //set the isupdated 
+  bool isupdated=false;
+  //set the order 
+  int order=0;
+
+  //create the new object in chats 
+Map<String,dynamic> obj ={};
+obj["userid"]=currentUserId;
+obj["lastupdate"]=currentDate;
+obj["order"]=order;
+obj["isupdated"]=isupdated;
+obj["orgid"]=orgid;
+DocumentReference newdoc= await FirebaseFirestore.instance.collection("chats").add(obj);
+//fetch the current user data 
+DocumentSnapshot user=await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
+//Navigate to the chatpage directly 
+ Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ChatScreen(newdoc.id,"user",user["firstname"]+" "+user["lastname"]))
+              );
+
+
+}
