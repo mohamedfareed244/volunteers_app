@@ -17,10 +17,11 @@ class MyApp extends StatelessWidget {
 
 class ChatScreen extends StatelessWidget {
   
-  ChatScreen([this.currentid="unkown",this.currenttype="user"]);
+  ChatScreen([this.currentid="unkown",this.currenttype="user",this.name="undefined"]);
 
   String currentid;
   String? currenttype;
+  String name;
   bool makesound=false;
 
 
@@ -40,7 +41,7 @@ class ChatScreen extends StatelessWidget {
           Navigator.pop(context);
         },
       ),
-      title: Text(' $currentid'),
+      title: Text(name),
     ),
     body: Column(
       children: [

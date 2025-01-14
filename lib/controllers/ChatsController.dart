@@ -13,7 +13,7 @@ Future<Widget> buildChatItem(BuildContext context, String name,String date, Colo
   onTap: () {
      Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ChatScreen(chatid,role))
+              MaterialPageRoute(builder: (context) => ChatScreen(chatid,role,name))
               );
   },
   child: Container(
