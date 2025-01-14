@@ -219,11 +219,12 @@ obj["isupdated"]=isupdated;
 obj["orgid"]=orgid;
 DocumentReference newdoc= await FirebaseFirestore.instance.collection("chats").add(obj);
 //fetch the current user data 
-DocumentSnapshot user=await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
+DocumentSnapshot Org=await FirebaseFirestore.instance.collection("Organization").doc(orgid).get();
+Map<String,dynamic> org=Org.data() as Map<String,dynamic>;
 //Navigate to the chatpage directly 
  Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ChatScreen(newdoc.id,"user",user["firstname"]+" "+user["lastname"]))
+              MaterialPageRoute(builder: (context) => ChatScreen(newdoc.id,"user",(org["Name"])))
               );
 
 
