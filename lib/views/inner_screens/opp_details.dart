@@ -1,6 +1,7 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:volunteers_app/controllers/ChatsController.dart';
 import 'package:volunteers_app/models/opp_model.dart';
 import 'package:volunteers_app/providers/opp_provider.dart';
 import 'package:volunteers_app/views/inner_screens/application_form.dart';
@@ -144,18 +145,18 @@ class _OppDetailsState extends State<OppDetails> {
                     ],
                   ),
                 ),
-                // Positioned(
-                //   right: 16,
-                //   bottom: 16,
-                //   child: FloatingActionButton.extended(
-                //     onPressed: () {
-                //       // Add your chat functionality here
-                //     },
-                //     backgroundColor: Colors.blue,
-                //     icon: const Icon(Icons.chat),
-                //     label: const Text("Chat"),
-                //   ),
-                // ),
+                Positioned(
+                  right: 16,
+                  bottom: 16,
+                  child: FloatingActionButton.extended(
+                    onPressed:(){
+                     StartNewChat(oppId,context);
+                    } ,
+                    backgroundColor: Colors.blue,
+                    icon: const Icon(Icons.chat),
+                    label: const Text("Chat"),
+                  ),
+                ),
               ],
             ),
     );
