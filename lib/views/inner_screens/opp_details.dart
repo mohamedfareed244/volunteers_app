@@ -150,7 +150,7 @@ class _OppDetailsState extends State<OppDetails> {
                   bottom: 16,
                   child: FloatingActionButton.extended(
                     onPressed:(){
-                     StartNewChat(oppId,context);
+                     StartNewChat(getCurrOpp.Orgid,context);
                     } ,
                     backgroundColor: Colors.blue,
                     icon: const Icon(Icons.chat),
