@@ -98,6 +98,9 @@ Future<User?> signInWithEmailAndPassword(String email, String password) async {
       User? organization = result.user;
 
       if (organization != null) {
+        // Send email verification
+        await organization.sendEmailVerification();
+
         // Create a organizationModel instance with all user attributes
         Organization newOrganization = Organization(
           id: organization.uid,

@@ -108,23 +108,42 @@ class _RegisterOrgState extends State<RegisterOrg> {
 
                             setState(() => loading = false);
 
-                            if (result == null) {
-                              setState(() =>
-                                  error = 'Registration failed. Try again.');
+                           if (result == null) {
+                              setState(() => error = 'Registration failed. Try again.');
                             } else {
-                              Navigator.push(context,MaterialPageRoute(builder: (context)=> drawerr(role: 'organization',)));
-                              print("User registered: ${result.id}");
+                              // Show verification prompt
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('Verification Email Sent'),
+                                  content: const Text(
+                                    'Please verify your email before logging in.',
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                     onPressed: () {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => SignIn()));
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              );
+
+                              print("Organization registered: ${result.id}");
                             }
                           }
                         },
                       ),
-                      SizedBox(height: 12.0),
+                      const SizedBox(height: 12.0),
                       Text(
                         error,
-                        style: TextStyle(color: Colors.red, fontSize: 14.0),
+                        style: const TextStyle(color: Colors.red, fontSize: 14.0),
                       ),
-                      SizedBox(height: 20.0),
-                      
+                      const SizedBox(height: 20.0),
                     ],
                   ),
                 ),
@@ -134,12 +153,17 @@ class _RegisterOrgState extends State<RegisterOrg> {
   }
 
   Widget buildTextFormField(
-      String label, IconData icon, Function(String) onChanged,
-      {bool obscureText = false, bool isEmail = false,int maxlines=1}) {
+    String label,
+    IconData icon,
+    Function(String) onChanged, {
+    bool obscureText = false,
+    bool isEmail = false,
+    int maxlines = 1,
+  }) {
     return TextFormField(
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: TextStyle(fontWeight: FontWeight.bold),
+        labelStyle: const TextStyle(fontWeight: FontWeight.bold),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
         prefixIcon: Icon(icon, color: Colors.orange[600]),
         fillColor: Colors.white,
