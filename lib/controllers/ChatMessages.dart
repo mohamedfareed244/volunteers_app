@@ -17,12 +17,12 @@ Widget buildMessage(BuildContext context, String message, bool isMe) {
           maxWidth: MediaQuery.of(context).size.width * 0.7, // Set maximum width
         ),
         decoration: BoxDecoration(
-          color: Colors.grey[300],
+          color: isMe?Colors.grey[300]:Colors.green,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Text(
           message,
-          style:const  TextStyle(color: Colors.black),
+          style:isMe?const TextStyle(color: Colors.black):const TextStyle(color: Colors.white),
         ),
       ),
     );
