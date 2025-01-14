@@ -97,7 +97,7 @@ class _DrawerWidgetState extends State<drawerr> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              MyHeaderDrawer(),
+              MyHeaderDrawer(role:widget.role,),
               MyDrawerList(widget.role), // Pass role to MyDrawerList
             ],
           ),

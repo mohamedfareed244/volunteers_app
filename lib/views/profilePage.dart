@@ -3,7 +3,7 @@
   import 'package:flutter/material.dart';
   import 'package:image_picker/image_picker.dart'; // Import the image_picker package
   import 'dart:io';
-
+  import 'package:firebase_storage/firebase_storage.dart';
   import 'package:volunteers_app/models/organization.dart';
   import 'package:volunteers_app/models/user.dart'; // To handle File object
 
@@ -17,8 +17,12 @@
   class _UserprofileState extends State<Userprofile> {
     final _db = FirebaseFirestore.instance.collection("users");
     final FirebaseAuth _auth = FirebaseAuth.instance; // Firebase Auth instance
+    final FirebaseStorage _storage = FirebaseStorage.instance;// Firebase Storage instance
 
-  //get single the organization data
+      File? _imageFile; // Variable to hold the selected image file
+      final ImagePicker _picker = ImagePicker(); // Create an instance of ImagePicker
+
+  //get single the user data
 
     Future<UserModel> getUserModel(String Useruid) async {
       final snapshot = await _db.doc(Useruid).get(); //json firsestore
@@ -55,26 +59,26 @@
       }
     }
 
-    //Save Changes Function
-
-    Future<void> saveChanges(UserModel user) async {
-      await _db.doc(user.uid).update(user.toMap());
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.green,
-          content: Text("Successfully Updated"),
-        ),
-      );
+   // Save changes to Firestore
+  Future<void> saveChanges(UserModel user) async {
+    String? imageUrl = await _uploadImage(user.uid); // Upload image and get URL
+    if (imageUrl != null) {
+      user.imageUrl = imageUrl; // Update the imageUrl in the user model
     }
+
+    await _db.doc(user.uid).update(user.toMap()); // Save changes to Firestore
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.green,
+        content: Text("Successfully Updated"),
+      ),
+    );
+  }
 
     //Delete Account Function
     Future<void> deleteAccount(String id) async {
       await _db.doc(id).delete();
     }
-
-    File? _imageFile; // Variable to hold the selected image file
-    final ImagePicker _picker =
-        ImagePicker(); // Create an instance of ImagePicker
 
     // Function to select an image from the gallery
     Future<void> _pickImage() async {
@@ -86,6 +90,25 @@
         });
       }
     }
+
+      // Upload the selected image to Firebase Storage
+  Future<String?> _uploadImage(String userId) async {
+    if (_imageFile == null) return null;
+
+    try {
+      // Define the path in Firebase Storage
+      final ref = _storage.ref().child('user_images').child('$userId.jpg');
+
+      // Upload the file
+      await ref.putFile(_imageFile!);
+
+      // Get the download URL
+      return await ref.getDownloadURL();
+    } catch (e) {
+      print('Error uploading image: $e');
+      return null;
+    }
+  }
 
     @override
     Widget build(BuildContext context) {
@@ -127,9 +150,12 @@
                               child: CircleAvatar(
                                 radius: 60, // Adjust the size
                                 // Placeholder color
-                                backgroundImage: _imageFile == null
-                                    ? AssetImage('assets/images/image1.png')
-                                    : FileImage(_imageFile!),
+                               backgroundImage: _imageFile != null
+                                  ? FileImage(_imageFile!)
+                                  : (userModel.imageUrl != null
+                                      ? NetworkImage(userModel.imageUrl!)
+                                          as ImageProvider
+                                      : AssetImage('assets/images/image1.png')),
                               ),
                             ),
                             Positioned(
@@ -214,6 +240,7 @@
                                       email: _emailController.text,
                                       address: _addressController.text,
                                       role: userModel.role,
+                                      imageUrl: userModel.imageUrl
                                     );
                                     await saveChanges(UpadtedOrg);
                                   },
