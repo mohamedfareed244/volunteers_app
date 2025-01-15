@@ -17,6 +17,8 @@ import 'package:volunteers_app/views/inner_screens/wishlist.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:volunteers_app/views/inner_screens/opp_details.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:volunteers_app/db_helper.dart';
 
 import 'screens/AuthWrapper.dart';
 
@@ -27,18 +29,25 @@ void main() async {
   );
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   initializeFirebaseMessaging();
-  runApp(const MainApp());
+
+  // Initialize the database and load wishlist
+  final wishlistProvider = WishlistProvider();
+  await wishlistProvider.loadWishlistFromDB();
+
+  runApp(MainApp(wishlistProvider: wishlistProvider));
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  final WishlistProvider wishlistProvider;
+
+  const MainApp({super.key, required this.wishlistProvider});
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => OppProvider()),
-        ChangeNotifierProvider(create: (_) => WishlistProvider()),
+        ChangeNotifierProvider(create: (_) => wishlistProvider),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         StreamProvider<User?>.value(
           value: AuthService().user,
@@ -51,8 +60,10 @@ class MainApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'Volunteens',
             theme: Styles.themeData(
-              isDarkTheme: themeProvider.getIsDarkTheme, context: context),
-            home:  const AuthWrapper(),
+              isDarkTheme: themeProvider.getIsDarkTheme,
+              context: context,
+            ),
+            home: const AuthWrapper(),
             routes: {
               OppDetails.routName: (context) => const OppDetails(),
               UploadOpp.routeName: (context) => const UploadOpp(),
@@ -66,12 +77,3 @@ class MainApp extends StatelessWidget {
     );
   }
 }
-// Future<void> _addDataToFirestore() async {
-//   try {
-//     final doc = FirebaseFirestore.instance.collection('users').doc('user1');
-//     await doc.set({'name': 'Eslam', 'age': 30});
-//     print('Data written to Firestore successfully!'); 
-//   } catch (e) {
-//     print('Error writing to Firestore: $e');
-//   }
-// }
