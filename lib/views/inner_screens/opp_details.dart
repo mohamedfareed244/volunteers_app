@@ -29,6 +29,7 @@ class _OppDetailsState extends State<OppDetails> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        backgroundColor: Theme.of(context).cardColor,
         leading: IconButton(
           onPressed: () {
             Navigator.canPop(context) ? Navigator.pop(context) : null;

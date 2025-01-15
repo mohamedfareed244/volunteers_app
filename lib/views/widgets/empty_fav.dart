@@ -14,10 +14,14 @@ class EmptyBagWidget extends StatelessWidget {
       required this.subtitle,
       required this.buttonText});
   final String imagePath, title, subtitle, buttonText;
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Padding(
+@override
+Widget build(BuildContext context) {
+  Size size = MediaQuery.of(context).size;
+
+  return Scaffold(
+   
+    
+    body: Padding(
       padding: const EdgeInsets.only(top: 50),
       child: SingleChildScrollView(
         child: Column(
@@ -73,7 +77,7 @@ class EmptyBagWidget extends StatelessWidget {
 )
           ],
         ),
-      ),
+    )),
     );
   }
 }

@@ -29,42 +29,42 @@ class WishlistScreen extends StatelessWidget {
             ),
           )
         : Scaffold(
-            appBar: AppBar(
-              title: const Text("Volunteens",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic,
-                    color: Color.fromARGB(255, 0, 0, 0))),
-  actions: [
-    IconButton(
-      onPressed: () {
-        MyAppMethods.showErrorORWarningDialog(
-          isError: false,
-          context: context,
-          subtitle: "Remove items",
-          fct: () {
-            wishlistProvider.clearLocalWishlist();
+  body: Column(
+    children: [
+      Align(
+        alignment: Alignment.topRight,
+        child: IconButton(
+          onPressed: () {
+            MyAppMethods.showErrorORWarningDialog(
+              isError: false,
+              context: context,
+              subtitle: "Remove items",
+              fct: () {
+                wishlistProvider.clearLocalWishlist();
+              },
+            );
           },
-        );
-      },
-      icon: const Icon(
-        Icons.delete_forever_rounded,
-        color: Colors.red,
+          icon: const Icon(
+            Icons.delete_forever_rounded,
+            color: Colors.red,
+          ),
+        ),
       ),
-    ),
-  ],
-),
-            body: DynamicHeightGridView(
-              itemCount: wishlistProvider.getWishlistItems.length,
-              builder: ((context, index) {
-                return oppWidget(
-                  productId: wishlistProvider.getWishlistItems.values
-                      .toList()[index]
-                      .OppsId,
-                );
-              }),
-              crossAxisCount: 2,
-            ),
-          );
+      Expanded(
+        child: DynamicHeightGridView(
+          itemCount: wishlistProvider.getWishlistItems.length,
+          builder: ((context, index) {
+            return oppWidget(
+              productId: wishlistProvider.getWishlistItems.values
+                  .toList()[index]
+                  .OppsId,
+            );
+          }),
+          crossAxisCount: 2,
+        ),
+      ),
+    ],
+  ),
+);
   }
 }

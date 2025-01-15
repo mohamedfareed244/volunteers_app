@@ -51,7 +51,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.amber[700],
+      color:Theme.of(context).cardColor,
       width: double.infinity,
       height: 200,
       padding: const EdgeInsets.only(top: 20.0),

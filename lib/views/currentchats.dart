@@ -22,7 +22,8 @@ class ChatsScreen extends StatelessWidget {
         } else if (snapshot.hasData) {
           return snapshot.data!;
         } else {
-          return const Center(child: Text('No data available.'));
+          return const Center(child: Text('No data available.',)
+          );
         }
       },
     );
@@ -59,7 +60,7 @@ try{
       bool isPortrait = constraints.maxWidth < 600;
 
       return Container(
-        color: Colors.white,
+         color: Theme.of(context).scaffoldBackgroundColor,
         child: StreamBuilder<List<Widget>>(
           stream: userRole == 'user'
               ? getUsersOrganizations(Currentuid, context)

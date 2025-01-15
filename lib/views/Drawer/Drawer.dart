@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:volunteers_app/providers/theme_provider.dart';
 import 'package:volunteers_app/services/AuthService.dart';
 import 'package:volunteers_app/views/WelcomeScreen.dart';
 import 'package:volunteers_app/views/currentchats.dart';
@@ -7,6 +9,7 @@ import 'package:volunteers_app/views/dashboard/edit_organization.dart';
 import 'package:volunteers_app/views/dashboard/review_applications.dart';
 import 'package:volunteers_app/views/dashboard/upload_opp.dart';
 import 'package:volunteers_app/views/dashboard/user_mangment.dart';
+import 'package:volunteers_app/views/inner_screens/wishlist.dart';
 import 'package:volunteers_app/views/privacy_policy.dart';
 import 'package:volunteers_app/views/send_feedback.dart';
 import 'package:volunteers_app/views/settings.dart';
@@ -52,8 +55,8 @@ class _DrawerWidgetState extends State<drawerr> {
       container = opportunitiesPage();
     } else if (currentPage == DrawerSections.chat) {
       container = ChatsScreen();
-    } else if (currentPage == DrawerSections.settings) {
-      container = SettingsPage();
+    } else if (currentPage == DrawerSections.favorites) {
+      container = WishlistScreen();
     } else if (currentPage == DrawerSections.notifications) {
       container = NotificationsPage();
     } else if (currentPage == DrawerSections.privacy_policy) {
@@ -74,12 +77,13 @@ class _DrawerWidgetState extends State<drawerr> {
 
     return Scaffold(
       appBar: AppBar(
+         backgroundColor: Theme.of(context).cardColor,
         title: widget.role == "user"
             ? Text("Volunteens",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontStyle: FontStyle.italic,
-                    color: const Color.fromARGB(255, 0, 0, 0)))
+                  color: Theme.of(context).appBarTheme.titleTextStyle?.color,))
             : Text("Organization Panel"),
         actions: [
           IconButton(
@@ -94,14 +98,33 @@ class _DrawerWidgetState extends State<drawerr> {
       ),
       body: container,
       drawer: Drawer(
+         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         child: SingleChildScrollView(
           child: Column(
             children: [
               MyHeaderDrawer(role:widget.role,),
               MyDrawerList(widget.role), // Pass role to MyDrawerList
-            ],
+                Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: SwitchListTile(
+            title: Text(
+              Theme.of(context).brightness == Brightness.dark
+                  ? "Dark Mode"
+                  : "Light Mode",
+             
+            ),
+            value: Theme.of(context).brightness == Brightness.dark,
+            onChanged: (value) {
+              final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+              themeProvider.setDarkTheme(themeValue: value);
+            },
           ),
         ),
+            ],
+            
+          ),
+        ),
+    
       ),
     );
   }
@@ -120,8 +143,8 @@ class _DrawerWidgetState extends State<drawerr> {
             currentPage == DrawerSections.opportunities ? true : false),
            
         Divider(),
-        menuItem(8, "Settings", Icons.settings_outlined,
-            currentPage == DrawerSections.settings ? true : false),
+        menuItem(8, "favorites", Icons.favorite_outline,
+            currentPage == DrawerSections.favorites ? true : false),
         menuItem(9, "Notifications", Icons.notifications_outlined,
             currentPage == DrawerSections.notifications ? true : false),
       ]);
@@ -174,7 +197,9 @@ class _DrawerWidgetState extends State<drawerr> {
 
   Widget menuItem(int id, String title, IconData icon, bool selected) {
     return Material(
-      color: selected ? Colors.grey[300] : Colors.transparent,
+     color: selected
+        ? Theme.of(context).hoverColor // Highlight color for selected item
+        : Colors.transparent,
       child: InkWell(
         onTap: () {
           Navigator.pop(context);
@@ -194,7 +219,7 @@ class _DrawerWidgetState extends State<drawerr> {
             } else if (id == 7) {
               currentPage = DrawerSections.review_volunteer;
             } else if (id == 8) {
-              currentPage = DrawerSections.settings;
+              currentPage = DrawerSections.favorites;
             } else if (id == 9) {
               currentPage = DrawerSections.notifications;
             } else if (id == 10) {
@@ -218,7 +243,7 @@ class _DrawerWidgetState extends State<drawerr> {
                 child: Icon(
                   icon,
                   size: 20,
-                  color: Colors.black,
+                  color:Theme.of(context).primaryColorLight,
                 ),
               ),
               Expanded(
@@ -226,7 +251,7 @@ class _DrawerWidgetState extends State<drawerr> {
                 child: Text(
                   title,
                   style: TextStyle(
-                    color: Colors.black,
+                    color:Theme.of(context).primaryColorLight,
                     fontSize: 16,
                   ),
                 ),
@@ -244,7 +269,7 @@ enum DrawerSections {
   profile,
   opportunities,
   chat,
-  settings,
+  favorites,
   notifications,
   privacy_policy,
   send_feedback,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:volunteers_app/providers/theme_provider.dart';
 import 'package:volunteers_app/views/dashboard/upload_opp.dart';
 import 'package:volunteers_app/views/inner_screens/wishlist.dart'; // Import for UploadOpportunityScreen if it's the same
 
@@ -10,6 +12,7 @@ class SendFeedbackPage extends StatefulWidget {
 class _SendFeedbackPageState extends State<SendFeedbackPage> {
   @override
   Widget build(BuildContext context) {
+          final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       body: Center(
         child: Column(
@@ -24,6 +27,15 @@ class _SendFeedbackPageState extends State<SendFeedbackPage> {
               },
               child: Text('Go to Wishlist'),
             ),
+
+             SwitchListTile(
+            title:
+                Text(themeProvider.getIsDarkTheme ? "Dark mode" : "Light mode"),
+            value: themeProvider.getIsDarkTheme,
+            onChanged: (value) {
+              themeProvider.setDarkTheme(themeValue: value);
+            },
+          ),
           ],
         ),
       ),

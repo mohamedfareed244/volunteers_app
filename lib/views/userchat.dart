@@ -34,7 +34,7 @@ class ChatScreen extends StatelessWidget {
   
   return Scaffold(
     appBar: AppBar(
-      backgroundColor: Colors.amber,
+      backgroundColor: Theme.of(context).cardColor,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () {
