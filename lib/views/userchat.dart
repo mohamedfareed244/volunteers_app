@@ -50,11 +50,7 @@ class ChatScreen extends StatelessWidget {
           child: StreamBuilder<List<Widget>>(
             stream: getChatMessages(context,currentid,currenttype),
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.active &&
-              snapshot.hasData && makesound ) {
-              
-               _playSound(); 
-          }
+      
             // Check the connection state
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());

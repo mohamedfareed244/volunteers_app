@@ -39,10 +39,35 @@ class NotificationService {
       );
 
       if (response.statusCode == 200) {
-        print('Notification sent successfully!');
+        print('Notification 1 sent successfully!');
       } else {
-        print('Failed to send notification: ${response.body}');
+        print('Failed to send notification 1 : ${response.body}');
       }
+
+      //send the alert for sound 
+      final message1 = {
+    "message": {
+       "data": {
+        "type": "newMessage",
+        "message": ""
+      },
+      "token": token
+    }
+  };
+      final response1 = await http.post(
+        Uri.parse(_fcmEndpoint),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $AccessToken',
+        },
+        body: jsonEncode(message),
+      );
+         if (response1.statusCode == 200) {
+        print('Notification 2 sent successfully!');
+      } else {
+        print('Failed to send notification 2 : ${response.body}');
+      }
+
     } catch (e) {
       print('Error sending notification: $e');
     }

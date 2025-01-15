@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -30,12 +31,29 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   initializeFirebaseMessaging();
 
+  //make sound when recieve new message 
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) async{
+ 
+  
+  if (message.data.isNotEmpty) {
+if(message.data["type"]=="newMessage"){
+await _playSound();
+}
+  }
+});
+
   // Initialize the database and load wishlist
   final wishlistProvider = WishlistProvider();
   await wishlistProvider.loadWishlistFromDB();
 
   runApp(MainApp(wishlistProvider: wishlistProvider));
 }
+
+  // Play sound alert function
+  Future<void> _playSound() async {
+     AudioPlayer _audioPlayer = AudioPlayer();
+    await _audioPlayer.play(AssetSource('sounds/alert.wav')); // Replace with your sound file
+  }
 
 class MainApp extends StatelessWidget {
   final WishlistProvider wishlistProvider;
