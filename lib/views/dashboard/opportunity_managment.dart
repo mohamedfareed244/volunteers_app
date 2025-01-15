@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:volunteers_app/models/opp_model.dart';
 import 'package:volunteers_app/models/organization.dart';
 import 'package:volunteers_app/views/dashboard/OpportunityDetailsPage.dart';
+import 'package:volunteers_app/views/dashboard/editOpportunity.dart';
 
 class OpportunityManagment extends StatefulWidget {
   const OpportunityManagment({super.key});
@@ -65,22 +67,22 @@ class _OpportunityManagmentState extends State<OpportunityManagment> {
               ),
             ),
           ),
-           Padding(
-             padding: const EdgeInsets.only(left: 20.0),
-             child: Text(
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: Text(
               "Avalivable Opportunities:",
               style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                fontFamily: GoogleFonts.poppins().fontFamily
-              ),
-                       ),
-           ),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: GoogleFonts.poppins().fontFamily),
+            ),
+          ),
           SizedBox(height: 10),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: opportunitiesCollection .where('orgid', isEqualTo: organization?.uid)
-              .snapshots(),
+              stream: opportunitiesCollection
+                  .where('orgid', isEqualTo: organization?.uid)
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final List<DocumentSnapshot> opportunities = snapshot
@@ -104,18 +106,7 @@ class _OpportunityManagmentState extends State<OpportunityManagment> {
                       final formattedDate =
                           "${createdAt.day}/${createdAt.month}/${createdAt.year}";
 
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => OpportunityDetailsPage(
-                                opportunityId: documentSnapshot.id,
-                              ),
-                            ),
-                          );
-                        },
-                        child: Padding(
+                      return  Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Material(
                             elevation: 4,
@@ -135,7 +126,7 @@ class _OpportunityManagmentState extends State<OpportunityManagment> {
                                     child: Image.network(
                                       documentSnapshot['oppImage'],
                                       width: double.infinity,
-                                      height: 150,
+                                      height: 200,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -162,7 +153,24 @@ class _OpportunityManagmentState extends State<OpportunityManagment> {
                                     children: [
                                       IconButton(
                                         onPressed: () {
-                                          // Add your edit logic here
+                                          final opportunity = OppModel(
+                                            OppId: documentSnapshot['oppId'],
+                                            OppTitle:
+                                                documentSnapshot['oppTitle'],
+                                            OppDescription: documentSnapshot[
+                                                'oppDescription'],
+                                            OppImage:
+                                                documentSnapshot['oppImage'],
+                                            Orgid: documentSnapshot['orgid'],
+                                          );
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => EditOpp(
+                                                  oppModel:
+                                                      opportunity), // Pass oppModel
+                                            ),
+                                          );
                                         },
                                         icon: const Icon(Icons.edit,
                                             color:
@@ -181,8 +189,8 @@ class _OpportunityManagmentState extends State<OpportunityManagment> {
                               ),
                             ),
                           ),
-                        ),
-                      );
+                        );
+                      
                     },
                   );
                 }
