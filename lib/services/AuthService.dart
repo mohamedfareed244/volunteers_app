@@ -25,8 +25,8 @@ Future<User?> signInWithEmailAndPassword(String email, String password) async {
     if (user != null && user.emailVerified) {
       //save the device token for leater notifications on chatting 
       String? token = await FirebaseMessaging.instance.getToken();
-      DocumentReference ref=await FirebaseFirestore.instance.collection("users").doc(user.uid);
-      if(ref!=null){
+      DocumentSnapshot ref=await FirebaseFirestore.instance.collection("users").doc(user.uid).get();
+      if(!ref.exists){
        await FirebaseFirestore.instance.collection("users").doc(user.uid).update({"token":token});
       }else{
         await FirebaseFirestore.instance.collection("Organization").doc(user.uid).update({"token":token});
