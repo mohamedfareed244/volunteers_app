@@ -23,13 +23,13 @@ Future<User?> signInWithEmailAndPassword(String email, String password) async {
     User? user = result.user;
 
     if (user != null && user.emailVerified) {
-      //save the device token for leater notifications on chatting 
+      //save the device token for later notifications  
       String? token = await FirebaseMessaging.instance.getToken();
       DocumentSnapshot ref=await FirebaseFirestore.instance.collection("users").doc(user.uid).get();
       if(ref.exists){
        await FirebaseFirestore.instance.collection("users").doc(user.uid).update({"token":token});
       }else{
-        await FirebaseFirestore.instance.collection("Organization").doc(user.uid).update({"token":token});
+       await FirebaseFirestore.instance.collection("Organization").doc(user.uid).update({"token":token});
       }
       
       
