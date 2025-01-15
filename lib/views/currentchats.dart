@@ -70,7 +70,7 @@ try{
             if (!_isFirstLoad &&
                 snapshot.connectionState == ConnectionState.active &&
                 snapshot.hasData) {
-              _playSound(); // Play sound on updates only
+           
             }
 
             // Mark as loaded after first load
@@ -114,8 +114,4 @@ try{
 }
 
 
-// Play sound alert function
-Future<void> _playSound() async {
-  AudioPlayer _audioPlayer = AudioPlayer();
-  await _audioPlayer.play(AssetSource('sounds/alert.wav')); // Replace with your sound file
-}
+
