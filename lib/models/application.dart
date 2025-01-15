@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
+import 'package:volunteers_app/models/user.dart';
 
 class Application {
   final String appId; // ID of the application
@@ -10,7 +11,8 @@ class Application {
   String status; // Status of the application, e.g., "pending"
   final DateTime applicationDate; // Timestamp for when the application was submitted
   final String relevantSkills; // Relevant skills provided by the user
-  final String interestReason; // Why the user is interested in the opportunity
+  final String interestReason;
+  UserModel? user;   // Why the user is interested in the opportunity
 
   Application({
     required this.userId,
@@ -22,6 +24,7 @@ class Application {
     required this.relevantSkills,
     required this.interestReason,
      String? appId, 
+     this.user,
   }):appId= appId ?? const Uuid().v4();
 
   // Convert Application object to a map for Firestore
