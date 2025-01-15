@@ -84,6 +84,7 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       backgroundColor: Colors.orange[50],
       appBar: AppBar(
+         backgroundColor: Theme.of(context).cardColor,
         elevation: 0.0,
         title: Text(
           'Sign In to Volunteens',

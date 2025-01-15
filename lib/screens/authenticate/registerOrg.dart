@@ -30,6 +30,7 @@ class _RegisterOrgState extends State<RegisterOrg> {
     return Scaffold(
       backgroundColor: Colors.orange[50],
       appBar: AppBar(
+         backgroundColor: Theme.of(context).cardColor,
         elevation: 5.0,
         title: Text('Sign Up to Organization',
             style: TextStyle(fontWeight: FontWeight.bold)),

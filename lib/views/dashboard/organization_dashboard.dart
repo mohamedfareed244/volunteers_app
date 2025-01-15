@@ -220,7 +220,7 @@ class OrganizationDashboard extends StatelessWidget {
                 },
                 children: [
                   TableRow(
-                    decoration: BoxDecoration(color: Colors.grey[200]),
+                    decoration: BoxDecoration( color: Theme.of(context).canvasColor,),
                     children: [
                       tableCell("Volunteer Name", true),
                       tableCell("Volunteer Email", true),

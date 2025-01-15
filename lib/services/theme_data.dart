@@ -17,6 +17,9 @@ class Styles {
            primaryColorLight: isDarkTheme
           ? const Color.fromARGB(255, 255, 255, 255)
           : const Color.fromARGB(255, 0, 0, 0),
+            canvasColor: isDarkTheme
+          ? const Color.fromARGB(255, 0, 0, 0)
+          : const Color.fromARGB(255, 238, 238, 238),
       brightness: isDarkTheme ? Brightness.dark : Brightness.light,
     );
   }

@@ -75,6 +75,7 @@ class _ReviewDetailsState extends State<ReviewDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).cardColor,
         title: const Text("Review Details"),
       ),
       body: isLoading

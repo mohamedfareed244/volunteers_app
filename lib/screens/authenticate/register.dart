@@ -31,7 +31,7 @@ class _RegisterState extends State<Register> {
     return Scaffold(
       backgroundColor: Colors.orange[50],
       appBar: AppBar(
-        backgroundColor: Colors.orange[700],
+      backgroundColor: Theme.of(context).cardColor,
         elevation: 5.0,
         title: Text('Sign Up to Volunteens',
             style: TextStyle(fontWeight: FontWeight.bold)),

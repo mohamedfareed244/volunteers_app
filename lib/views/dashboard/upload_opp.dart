@@ -255,6 +255,7 @@ class _UploadOppState extends State<UploadOpp> {
                   label: const Text(
                     "Clear",
                     style: TextStyle(
+                      color:Colors.black,
                       fontSize: 20,
                     ),
                   ),
