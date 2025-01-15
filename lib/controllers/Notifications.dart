@@ -60,7 +60,7 @@ class NotificationService {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $AccessToken',
         },
-        body: jsonEncode(message),
+        body: jsonEncode(message1),
       );
          if (response1.statusCode == 200) {
         print('Notification 2 sent successfully!');
