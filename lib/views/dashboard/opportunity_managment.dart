@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:volunteers_app/models/organization.dart';
 import 'package:volunteers_app/views/dashboard/OpportunityDetailsPage.dart';
@@ -48,6 +49,7 @@ class _OpportunityManagmentState extends State<OpportunityManagment> {
     final organization = Provider.of<User?>(context);
     return Scaffold(
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.all(10),
@@ -63,6 +65,18 @@ class _OpportunityManagmentState extends State<OpportunityManagment> {
               ),
             ),
           ),
+           Padding(
+             padding: const EdgeInsets.only(left: 20.0),
+             child: Text(
+              "Avalivable Opportunities",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                fontFamily: GoogleFonts.poppins().fontFamily
+              ),
+                       ),
+           ),
+          SizedBox(height: 10),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: opportunitiesCollection .where('orgid', isEqualTo: organization?.uid)
