@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:volunteers_app/controllers/Notifications.dart';
 import 'package:volunteers_app/models/application.dart';
 import 'package:volunteers_app/models/user.dart';
 
@@ -48,28 +49,53 @@ class _ReviewDetailsState extends State<ReviewDetails> {
   }
 
   Future<void> _updateApplicationStatus(String status) async {
-    try {
-      // Update status in Firestore
-      await FirebaseFirestore.instance
-          .collection("applications")
-          .doc(widget.application.appId) // Assuming `id` exists in `Application`
-          .update({"status": status});
+  try {
+    // Update status in Firestore
+    await FirebaseFirestore.instance
+        .collection("applications")
+        .doc(widget.application.appId)
+        .update({"status": status});
 
-      // Fetch the updated application details after update
-      final updatedApplicationDoc = await FirebaseFirestore.instance
-          .collection("applications")
-          .doc(widget.application.appId)
+    // Notify the user if the application is accepted
+    if (status == "Accepted") {
+      final userDoc = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(widget.application.userId)
           .get();
 
-      if (updatedApplicationDoc.exists) {
-        setState(() {
-          widget.application.status = updatedApplicationDoc["status"];
-        });
+      if (userDoc.exists) {
+        final userData = userDoc.data() as Map<String, dynamic>;
+        final userToken = userData["token"];
+        final opportunityTitle = widget.application.opportunityTitle ?? "an opportunity";
+
+        // Send notification using NotificationService
+        NotificationService notificationService = NotificationService();
+        await notificationService.sendNotification(
+          userToken,
+          "Application Accepted",
+          "Congratulations! Your application for $opportunityTitle has been accepted!"
+        );
+
+        print("Notification sent to the user.");
       }
-    } catch (e) {
-      print("Error updating application status: $e");
     }
+
+    // Fetch the updated application details after update
+    final updatedApplicationDoc = await FirebaseFirestore.instance
+        .collection("applications")
+        .doc(widget.application.appId)
+        .get();
+
+    if (updatedApplicationDoc.exists) {
+      setState(() {
+        widget.application.status = updatedApplicationDoc["status"];
+      });
+    }
+  } catch (e) {
+    print("Error updating application status: $e");
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
