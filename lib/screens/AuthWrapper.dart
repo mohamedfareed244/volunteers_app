@@ -65,7 +65,35 @@ class AuthWrapper extends StatelessWidget {
           );
         });
 
-        return const Center(child: Text('Logging out...'));
+        return  Scaffold(
+          backgroundColor: Colors.amber,
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const CircularProgressIndicator(),
+                const SizedBox(height: 20),
+                Text(
+                  'Logging out...',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  'Redirecting you to the welcome screen.',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        );
       },
     );
   }
