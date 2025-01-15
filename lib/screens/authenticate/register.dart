@@ -141,9 +141,7 @@ class _RegisterState extends State<Register> {
                         style: TextStyle(color: Colors.red, fontSize: 14.0),
                       ),
                       SizedBox(height: 20.0),
-                      TextButton(onPressed: (){
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> RegisterOrg()));
-                      }, child: Text("Register as Organization",style: TextStyle(color: Colors.indigo[900], decoration: TextDecoration.underline,),))
+                      
                     ],
                   ),
                 ),

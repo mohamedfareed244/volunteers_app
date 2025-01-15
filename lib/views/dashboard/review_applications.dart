@@ -15,15 +15,6 @@ class ReviewApplications extends StatefulWidget {
 class _ReviewApplicationsState extends State<ReviewApplications> {
   final _firestore = FirebaseFirestore.instance;
 
-  // Fetch applications from Firestore
-  // Stream<List<Application>> getApplicationsStream(String organizationId) {
-  //   return _firestore.snapshots().map((querySnapshot) {
-  //     return querySnapshot.docs
-  //         .map((doc) => Application.fromSnapshot(doc))
-  //         .toList();
-  //   });
-  // }
-
   // Fetch applications for the organization's opportunities
   Stream<List<Application>> getApplicationsForOrganization(String organizationId) async* {
     // Fetch opportunities for the organization
@@ -51,12 +42,11 @@ class _ReviewApplicationsState extends State<ReviewApplications> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-  final organization = Provider.of<User>(context);
-    final organizationId = organization.uid; 
+    final organization = Provider.of<User>(context);
+    final organizationId = organization.uid;
+    
     return Scaffold(
       body: StreamBuilder<List<Application>>(
         stream: getApplicationsForOrganization(organizationId),
@@ -89,7 +79,7 @@ class _ReviewApplicationsState extends State<ReviewApplications> {
                 ),
                 Divider(
                   thickness: 2,
-                  color: Colors.grey[400],
+                  color: Colors.grey[400], // This is fine without const
                 ),
                 const SizedBox(height: 16),
                 Expanded(
@@ -104,13 +94,19 @@ class _ReviewApplicationsState extends State<ReviewApplications> {
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
                         subtitle: Text(
-                          application.opportunityTitle ??
-                              'No opportunity title',
+                          application.opportunityTitle ?? 'No opportunity title',
                           style: const TextStyle(fontSize: 12),
                         ),
                         trailing: Text(
-                          application.status ,
-                          style: const TextStyle(fontSize: 12),
+                          application.status,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: application.status == 'Accepted'
+                                ? Colors.green
+                                : (application.status == 'Rejected'
+                                    ? Colors.red
+                                    : Colors.black),
+                          ),
                         ),
                         onTap: () {
                           // Navigate to ReviewDetails screen
