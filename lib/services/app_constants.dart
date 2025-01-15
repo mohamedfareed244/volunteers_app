@@ -12,17 +12,17 @@ class AppConstants {
     CategoryModel(
       id: "events",
       image: AssetsManager.events,
-      name: "events",
+      name: "Events",
     ),
     CategoryModel(
       id: "donations",
       image: AssetsManager.donations,
-      name: "donations",
+      name: "Workshops",
     ),
     CategoryModel(
       id: "volunteering",
       image: AssetsManager.volunteering,
-      name: "volunteering",
+      name: "Volunteering",
     ),
    
     
