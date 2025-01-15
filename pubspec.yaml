@@ -31,9 +31,6 @@ dependencies:
   intl: ^0.20.1
   firebase_messaging: ^15.2.0
   permission_handler: ^11.3.1
-  sqflite: ^2.2.3
-  path_provider: ^2.0.11
-
 
 
 dev_dependencies:
@@ -62,5 +59,6 @@ flutter:
     - assets/images/courses-2.jpg
     - assets/images/courses-3.jpg
     - assets/sounds/alert.wav
+    - assets/ApiKey/ServiceAccount.json
 
 

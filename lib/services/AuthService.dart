@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:volunteers_app/controllers/Notifications.dart';
 import 'package:volunteers_app/models/organization.dart';
 import 'package:volunteers_app/models/user.dart';
 
 class AuthService {
+  NotificationService service=new NotificationService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   Stream<User?> get user {
@@ -20,6 +23,10 @@ Future<User?> signInWithEmailAndPassword(String email, String password) async {
     User? user = result.user;
 
     if (user != null && user.emailVerified) {
+      //save the device token for leater notifications on chatting 
+      String? token = await FirebaseMessaging.instance.getToken();
+      await FirebaseFirestore.instance.collection("users").doc(user.uid).update({"token":token});
+      
       return user;
     } else if (user != null && !user.emailVerified) {
       print('Email not verified. Please verify your email.');
