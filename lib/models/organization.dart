@@ -7,7 +7,7 @@ class Organization {
   final String description;
   final String contactNumber;
   final String role;
-  final String? imageUrl;
+  String? imageUrl;
 
   Organization({
     this.id,

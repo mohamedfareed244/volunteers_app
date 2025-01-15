@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart'; // Import the image_picker package
 import 'dart:io';
-
 import 'package:volunteers_app/models/organization.dart'; // To handle File object
+import 'package:firebase_storage/firebase_storage.dart';
 
 class Orgprofile extends StatefulWidget {
   const Orgprofile({super.key});
@@ -16,6 +16,10 @@ class Orgprofile extends StatefulWidget {
 class _OrgprofileState extends State<Orgprofile> {
   final _db = FirebaseFirestore.instance.collection("Organization");
   final FirebaseAuth _auth = FirebaseAuth.instance; // Firebase Auth instance
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+
+  File? _imageFile; // Variable to hold the selected image file
+      final ImagePicker _picker = ImagePicker(); // Create an instance of ImagePicker
 
 //get single the organization data
 
@@ -65,9 +69,15 @@ class _OrgprofileState extends State<Orgprofile> {
     }
   }
 
+
+
   //Save Changes Function
 
   Future<void> saveChanges(Organization org) async {
+    String? imageUrl = await _uploadImage(org.id!); // Upload image and get URL
+    if (imageUrl != null) {
+      org.imageUrl = imageUrl; // Update the imageUrl in the user model
+    }
     await _db.doc(org.id).update(org.toJson());
      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -82,10 +92,6 @@ class _OrgprofileState extends State<Orgprofile> {
     await _db.doc(id).delete();
   }
 
-  File? _imageFile; // Variable to hold the selected image file
-  final ImagePicker _picker =
-      ImagePicker(); // Create an instance of ImagePicker
-
   // Function to select an image from the gallery
   Future<void> _pickImage() async {
     final XFile? selected =
@@ -94,6 +100,24 @@ class _OrgprofileState extends State<Orgprofile> {
       setState(() {
         _imageFile = File(selected.path);
       });
+    }
+  }
+
+   Future<String?> _uploadImage(String orgId) async {
+    if (_imageFile == null) return null;
+
+    try {
+      // Define the path in Firebase Storage
+      final ref = _storage.ref().child('organization_images').child('$orgId.jpg');
+
+      // Upload the file
+      await ref.putFile(_imageFile!);
+
+      // Get the download URL
+      return await ref.getDownloadURL();
+    } catch (e) {
+      print('Error uploading image: $e');
+      return null;
     }
   }
 
@@ -131,9 +155,12 @@ class _OrgprofileState extends State<Orgprofile> {
                             child: CircleAvatar(
                               radius: 60, // Adjust the size
                               // Placeholder color
-                              backgroundImage: _imageFile == null
-                                  ? AssetImage('assets/images/image1.png')
-                                  : FileImage(_imageFile!),
+                              backgroundImage: _imageFile != null
+                                  ? FileImage(_imageFile!)
+                                  : (org.imageUrl != null
+                                      ? NetworkImage(org.imageUrl!)
+                                          as ImageProvider
+                                      : AssetImage('assets/images/image1.png'))
                             ),
                           ),
                           Positioned(
