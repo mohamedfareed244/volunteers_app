@@ -21,63 +21,82 @@ class _SignInState extends State<SignIn> {
   String password = '';
   String errorMessage = ''; // Error message for unverified email
 
-  void _showRegistrationDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Center(
-            child: Text(
-              "Register as",
-              textAlign: TextAlign.center,
-            ),
+ void _showRegistrationDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Center(
+          child: Text(
+            "Register as",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 10),
+            Text(
+              "Choose your role",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+            ),
+          ],
+        ),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              SizedBox(height: 10),
-              Text(
-                "Choose your role",
-                textAlign: TextAlign.center,
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Register(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange[600], // Button background color
+                  foregroundColor: Colors.white, // Button text color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30), // Rounded edges
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                ),
+                child: Text("User", style: TextStyle(fontSize: 16)),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RegisterOrg(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange[600], // Button background color
+                  foregroundColor: Colors.white, // Button text color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30), // Rounded edges
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                ),
+                child: Text("Organization", style: TextStyle(fontSize: 16)),
               ),
             ],
           ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context); // Close the dialog
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Register(),
-                      ),
-                    );
-                  },
-                  child: Text("User"),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context); // Close the dialog
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RegisterOrg(),
-                      ),
-                    );
-                  },
-                  child: Text("Organization"),
-                ),
-              ],
-            ),
-          ],
-        );
-      },
-    );
-  }
+        ],
+      );
+    },
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
