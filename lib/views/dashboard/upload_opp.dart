@@ -10,6 +10,7 @@ import 'package:uuid/uuid.dart';
 import 'package:volunteers_app/controllers/my_app_method.dart';
 import 'package:volunteers_app/models/opp_model.dart';
 import 'package:volunteers_app/services/my_validators.dart';
+import 'package:volunteers_app/views/inner_screens/loading_manager.dart';
 
 import 'dart:io';
 
@@ -229,7 +230,9 @@ class _UploadOppState extends State<UploadOpp> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return GestureDetector(
+    return LoadingManager(
+      isLoading: _isLoading,
+      child:  GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
       },
@@ -431,6 +434,6 @@ class _UploadOppState extends State<UploadOpp> {
           ),
         ),
       ),
-    );
+     ) );
   }
 }
