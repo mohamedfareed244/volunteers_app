@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:volunteers_app/models/application.dart';
 import 'review_details.dart';
 
@@ -11,22 +13,53 @@ class ReviewApplications extends StatefulWidget {
 }
 
 class _ReviewApplicationsState extends State<ReviewApplications> {
-  final _db = FirebaseFirestore.instance.collection("applications");
+  final _firestore = FirebaseFirestore.instance;
 
   // Fetch applications from Firestore
-  Stream<List<Application>> getApplicationsStream() {
-    return _db.snapshots().map((querySnapshot) {
+  // Stream<List<Application>> getApplicationsStream(String organizationId) {
+  //   return _firestore.snapshots().map((querySnapshot) {
+  //     return querySnapshot.docs
+  //         .map((doc) => Application.fromSnapshot(doc))
+  //         .toList();
+  //   });
+  // }
+
+  // Fetch applications for the organization's opportunities
+  Stream<List<Application>> getApplicationsForOrganization(String organizationId) async* {
+    // Fetch opportunities for the organization
+    final opportunitiesQuery = await _firestore
+        .collection('opportunitites')
+        .where('orgid', isEqualTo: organizationId)
+        .get();
+
+    final opportunityIds = opportunitiesQuery.docs.map((doc) => doc.id).toList();
+
+    if (opportunityIds.isEmpty) {
+      yield [];
+      return;
+    }
+
+    // Fetch applications for those opportunities
+    yield* _firestore
+        .collection('applications')
+        .where('opportunityId', whereIn: opportunityIds)
+        .snapshots()
+        .map((querySnapshot) {
       return querySnapshot.docs
           .map((doc) => Application.fromSnapshot(doc))
           .toList();
     });
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+  final organization = Provider.of<User>(context);
+    final organizationId = organization.uid; 
     return Scaffold(
       body: StreamBuilder<List<Application>>(
-        stream: getApplicationsStream(),
+        stream: getApplicationsForOrganization(organizationId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
