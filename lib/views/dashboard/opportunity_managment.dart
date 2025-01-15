@@ -68,9 +68,9 @@ class _OpportunityManagmentState extends State<OpportunityManagment> {
            Padding(
              padding: const EdgeInsets.only(left: 20.0),
              child: Text(
-              "Avalivable Opportunities",
+              "Avalivable Opportunities:",
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
                 fontFamily: GoogleFonts.poppins().fontFamily
               ),
