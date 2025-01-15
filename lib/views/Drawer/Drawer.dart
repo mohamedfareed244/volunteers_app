@@ -4,6 +4,7 @@ import 'package:volunteers_app/providers/theme_provider.dart';
 import 'package:volunteers_app/services/AuthService.dart';
 import 'package:volunteers_app/views/WelcomeScreen.dart';
 import 'package:volunteers_app/views/currentchats.dart';
+import 'package:volunteers_app/views/dashboard/opportunity_managment.dart';
 import 'package:volunteers_app/views/dashboard/organization_dashboard.dart';
 import 'package:volunteers_app/views/dashboard/edit_organization.dart';
 import 'package:volunteers_app/views/dashboard/review_applications.dart';
@@ -71,19 +72,22 @@ class _DrawerWidgetState extends State<drawerr> {
       container = ReviewApplications(); // Review Volunteer Page
     } else if (currentPage == DrawerSections.post_opportunity) {
       container = UploadOpp(); // Post Opportunity Page
+    } else if (currentPage == DrawerSections.opportunities_managament) {
+      container = OpportunityManagment();
     } else if (currentPage == DrawerSections.user_mangament) {
       container = UserPage();
     }
 
     return Scaffold(
       appBar: AppBar(
-         backgroundColor: Theme.of(context).cardColor,
+        backgroundColor: Theme.of(context).cardColor,
         title: widget.role == "user"
             ? Text("Volunteens",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic,
-                  color: Theme.of(context).appBarTheme.titleTextStyle?.color,))
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                  color: Theme.of(context).appBarTheme.titleTextStyle?.color,
+                ))
             : Text("Organization Panel"),
         actions: [
           IconButton(
@@ -98,33 +102,33 @@ class _DrawerWidgetState extends State<drawerr> {
       ),
       body: container,
       drawer: Drawer(
-         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         child: SingleChildScrollView(
           child: Column(
             children: [
-              MyHeaderDrawer(role:widget.role,),
+              MyHeaderDrawer(
+                role: widget.role,
+              ),
               MyDrawerList(widget.role), // Pass role to MyDrawerList
-                Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: SwitchListTile(
-            title: Text(
-              Theme.of(context).brightness == Brightness.dark
-                  ? "Dark Mode"
-                  : "Light Mode",
-             
-            ),
-            value: Theme.of(context).brightness == Brightness.dark,
-            onChanged: (value) {
-              final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-              themeProvider.setDarkTheme(themeValue: value);
-            },
-          ),
-        ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: SwitchListTile(
+                  title: Text(
+                    Theme.of(context).brightness == Brightness.dark
+                        ? "Dark Mode"
+                        : "Light Mode",
+                  ),
+                  value: Theme.of(context).brightness == Brightness.dark,
+                  onChanged: (value) {
+                    final themeProvider =
+                        Provider.of<ThemeProvider>(context, listen: false);
+                    themeProvider.setDarkTheme(themeValue: value);
+                  },
+                ),
+              ),
             ],
-            
           ),
         ),
-    
       ),
     );
   }
@@ -141,7 +145,6 @@ class _DrawerWidgetState extends State<drawerr> {
             currentPage == DrawerSections.profile ? true : false),
         menuItem(3, "Events", Icons.event,
             currentPage == DrawerSections.opportunities ? true : false),
-           
         Divider(),
         menuItem(8, "favorites", Icons.favorite_outline,
             currentPage == DrawerSections.favorites ? true : false),
@@ -158,10 +161,15 @@ class _DrawerWidgetState extends State<drawerr> {
                 ? true
                 : false),
       );
-      // menuItems.add(
-      //   menuItem(5, "Manage Opportunities", Icons.manage_accounts,
-      //       currentPage == DrawerSections.opportunities ? true : false),
-      // );
+      menuItems.add(
+        menuItem(
+            5,
+            "Manage Opportunities",
+            Icons.mark_email_read_rounded,
+            currentPage == DrawerSections.opportunities_managament
+                ? true
+                : false),
+      );
       menuItems.add(
         menuItem(6, "Edit Profile", Icons.edit,
             currentPage == DrawerSections.edit_org_profile ? true : false),
@@ -180,8 +188,8 @@ class _DrawerWidgetState extends State<drawerr> {
 
     // Add common menu items at the end
     menuItems.addAll([
-        menuItem(14, "Chats", Icons.message,
-            currentPage == DrawerSections.chat ? true : false),
+      menuItem(14, "Chats", Icons.message,
+          currentPage == DrawerSections.chat ? true : false),
       Divider(),
       menuItem(10, "Privacy Policy", Icons.privacy_tip_outlined,
           currentPage == DrawerSections.privacy_policy ? true : false),
@@ -197,9 +205,9 @@ class _DrawerWidgetState extends State<drawerr> {
 
   Widget menuItem(int id, String title, IconData icon, bool selected) {
     return Material(
-     color: selected
-        ? Theme.of(context).hoverColor // Highlight color for selected item
-        : Colors.transparent,
+      color: selected
+          ? Theme.of(context).hoverColor // Highlight color for selected item
+          : Colors.transparent,
       child: InkWell(
         onTap: () {
           Navigator.pop(context);
@@ -212,8 +220,8 @@ class _DrawerWidgetState extends State<drawerr> {
               currentPage = DrawerSections.opportunities;
             } else if (id == 4) {
               currentPage = DrawerSections.organization_dashboard;
-            // } else if (id == 5) {
-            //   currentPage = DrawerSections.opportunities;
+            } else if (id == 5) {
+              currentPage = DrawerSections.opportunities_managament;
             } else if (id == 6) {
               currentPage = DrawerSections.edit_org_profile;
             } else if (id == 7) {
@@ -230,7 +238,7 @@ class _DrawerWidgetState extends State<drawerr> {
               currentPage = DrawerSections.post_opportunity;
             } else if (id == 13) {
               currentPage = DrawerSections.user_mangament;
-            }else if(id == 14){
+            } else if (id == 14) {
               currentPage = DrawerSections.chat;
             }
           });
@@ -243,7 +251,7 @@ class _DrawerWidgetState extends State<drawerr> {
                 child: Icon(
                   icon,
                   size: 20,
-                  color:Theme.of(context).primaryColorLight,
+                  color: Theme.of(context).primaryColorLight,
                 ),
               ),
               Expanded(
@@ -251,7 +259,7 @@ class _DrawerWidgetState extends State<drawerr> {
                 child: Text(
                   title,
                   style: TextStyle(
-                    color:Theme.of(context).primaryColorLight,
+                    color: Theme.of(context).primaryColorLight,
                     fontSize: 16,
                   ),
                 ),
@@ -277,5 +285,6 @@ enum DrawerSections {
   edit_org_profile, // Edit Organization Profile
   review_volunteer, // Review Volunteer
   post_opportunity, // post opportunity
-  user_mangament
+  user_mangament, // User Management
+  opportunities_managament
 }
