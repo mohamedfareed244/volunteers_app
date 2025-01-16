@@ -9,7 +9,26 @@ class Styles {
     required BuildContext context,
   }) {
     return ThemeData(
-      textTheme: GoogleFonts.poppinsTextTheme(),
+     // Setting up text themes with Google Fonts and fallback
+      textTheme: GoogleFonts.poppinsTextTheme().copyWith(
+        bodyLarge: TextStyle(
+          color: isDarkTheme
+              ? Colors.white // Text color in dark mode
+              : Colors.black, // Text color in light mode
+        ),
+        bodyMedium: TextStyle(
+          color: isDarkTheme
+              ? const Color.fromARGB(179, 255, 255, 255) // Secondary text color in dark mode
+              : Colors.black87, // Secondary text color in light mode
+        ),
+        titleLarge: TextStyle(
+          color: isDarkTheme
+              ? Colors.white // Headline color in dark mode
+              : Colors.black, // Headline color in light mode
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+        ),
+      ),
       scaffoldBackgroundColor: isDarkTheme
           ? AppColors.darkScaffoldColor
           : AppColors.lightScaffoldColor,
