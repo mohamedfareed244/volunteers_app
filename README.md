@@ -1,9 +1,9 @@
-🌟 VolunteerConnect - Where Passion Meets Purpose 🌟
-Welcome to VolunteerConnect, a Flutter-powered app that bridges the gap between organizations and volunteers, making the world a better place—one opportunity at a time! 🚀
+🌟 Volunteens - Where Passion Meets Purpose 🌟
+Welcome to Volunteens, a Flutter-powered app that bridges the gap between organizations and volunteers, making the world a better place—one opportunity at a time! 🚀
 
 Whether you're an organization looking to make a difference or a volunteer eager to lend a hand, VolunteerConnect is your go-to platform. With seamless sign-ups, opportunity postings, and a robust chat module, we’ve got everything you need to connect, collaborate, and create impact. 💬✨
 
-🎯 What Does VolunteerConnect Offer?
+🎯 What Does Volunteens Offer?
 
 For Organizations:
 
